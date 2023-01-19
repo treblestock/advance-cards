@@ -2,16 +2,31 @@
 import { ref, computed, watch  } from 'vue'
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted  } from 'vue'
 
-import DefaultLayout from '@/components/sections/DefaultLayout.vue'
+
+import Set from '@/components/Set.vue'
+
+import { useStoreSets } from '@/stores/Sets.js'
+const storeSets = useStoreSets()
 
 
+const sets = computed(() => storeSets.sets)
 
+onMounted(() => {
+  storeSets.loadSet('nlc')
+})
 
 </script>
 
 <template>
   <div class="app">
-    <DefaultLayout />
+    <div class="sets">
+      <Set class="sets_set"
+        v-for="(set, setName) in sets" :key="setName" 
+        :set="set"
+        :setName="setName"
+        
+      />
+    </div>
   </div>  
 </template>
 
@@ -30,22 +45,18 @@ body
   font-size: 2rem
 
 
-
-.btn 
-  padding: 0.8rem !important
-  background: turquoise
-  &:hover 
-    background: darken(turquoise, 10%)
-  
-  &:active 
-    background: red
-  
-
 </style>
 
 <style scoped lang="sass">
 @import @/assets/css/_helpers
 @import @/assets/css/_vars
+
+
+.sets
+  display: flex
+  flex-direction: column
+  &__set
+    margin-bottom: 3rem
 
 
 </style>
