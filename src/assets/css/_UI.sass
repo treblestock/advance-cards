@@ -1,0 +1,199 @@
+@import @/assets/css/_vars
+@import @/assets/css/_helpers
+@import @/assets/css/_vueAnimations
+
+//* Font
+.title
+  font-size: 4.6rem
+  line-height: 1.3
+  font-weight: 700
+
+  &_label
+    font-size: 1.6rem
+    line-height: 1.5
+    font-weight: 700
+    text-transform: uppercase
+
+  &._32
+    font-size: 3.2rem
+
+
+body > *
+  font-size: 1.6rem
+  line-height: 1.6
+
+// links
+.link
+  &:hover
+    cursor: pointer
+
+.red
+.bold
+  font-weight: 700
+.fw400
+  font-weight: 700
+
+.price
+  &:before 
+    content: '$'
+    margin-right: .3rem
+    
+  
+
+
+//* Btns
+
+*[class*='btn']
+  display: inline-block
+
+// animations
+=hoverDark
+  position: relative
+  &:before 
+    position: absolute
+    top: 0
+    left: 0
+
+    display: block
+    width: 100%
+    height: 100%
+
+    content: ''
+    opacity: .2
+
+=btn-ui_solid
+
+=btn-ui_outl
+  
+
+
+span.btn
+  padding: 0
+
+.btn
+  display: inline-block
+  padding: 1.5rem 3rem
+  font-size: 1.4rem
+  text-align: center
+  +btn-ui_solid
+  
+  &._s
+    padding: 1.2rem 2.4rem
+    font-size: 1.2rem
+  &._l
+    padding: 1.8rem 4rem
+    font-size: 1.6rem
+
+  &:focus-visible,
+  &:hover
+    +hoverDark
+
+.btn-outl
+  padding: 1.5rem 3rem
+  font-size: 1.4rem
+  +btn-ui_outl
+
+  &._s
+    padding: 1.2rem 2.4rem
+    font-size: 1.2rem
+  &._l
+    padding: 1.8rem 4rem
+    font-size: 1.6rem
+
+  &:focus-visible,
+  &:hover
+    +btn-ui_solid
+
+
+//* icons
+
+svg
+  fill: currentColor
+
+.icon
+  width: 2.4rem
+  height: 2.4rem
+  &._red
+
+
+
+._ticked
+  display: flex
+  &:before 
+    content: url('/img/icons/decor/tick-circled.svg')
+    flex: 0 0 1.6rem
+    height: 1.6rem
+    margin-right: 1rem
+
+  
+// Tags
+.tag
+  padding: 0.5rem 1.5rem
+
+
+  font-size: 1.4rem
+  line-height: 1.5
+  font-weight: 700
+
+  transition: all ease .2s
+
+  &:hover
+    box-shadow: none
+    
+
+  &:before 
+    content: '#'
+    
+
+//* Sections
+=section-ui_carrot
+  position: relative
+  &:after 
+    z-index: -1
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+
+    opacity: .2
+    
+    display: block
+    content: ''
+
+
+=section-ui_carrot_bg-decor
+  position: relative
+
+  &:before 
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    z-index: -1
+
+    opacity: 0.2
+    content: ''
+    
+  .section__decor
+    z-index: -1
+    position: absolute
+    bottom: 0
+    
+    width: 100%
+    &:after,
+    &:before
+      position: absolute
+      bottom: 0
+      content: url("/img/decor/illustrations/08.webp")
+    
+    &:before
+      left: 0
+    &:after
+      right: 0
+
+=box
+  border: 1px solid #000
+  border-radius: .5rem
+  padding: 0.5rem

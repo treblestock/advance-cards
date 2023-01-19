@@ -1,0 +1,110 @@
+@import @/assets/css/_vars
+@import @/assets/css/_helpers
+
+// =================================================================================================================
+// =================================================================================================================
+// ANIMATIONS 
+//* 
+@keyframes shake-x
+  0%
+    transform: translate(-5rem)
+  30%
+    transform: translate(3.5rem)
+  50%
+    transform: translate(-2.5rem)
+  70%
+    transform: translate(1.5rem)
+  100%
+    transform: translate(0)
+
+@keyframes shake-y
+  0%
+    transform: translate(0, -5rem)
+  30%
+    transform: translate(0, 3.5rem)
+  50%
+    transform: translate(0, -2.5rem)
+  70%
+    transform: translate(0, 1.5rem)
+  100%
+    transform: translate(0, 0)
+
+@keyframes shake-rotate
+  0%
+    transform: rotate(5deg)
+  20%
+    transform: rotate(-5deg)
+  40%
+    transform: rotate(5deg)
+  60%
+    transform: rotate(-5deg)
+  80%
+    transform: rotate(5deg)
+  100%
+    transform: rotate(-5deg)
+
+
+// =================================================================================================================
+// =================================================================================================================
+// VUE TRANSITIONS/ANIMATIONS
+//* fade-shift
+.fade-shift-move,
+.fade-shift-enter-active,
+.fade-shift-leave-active
+  transition: all, .3s ease 
+
+.fade-shift-leave-active
+  position: absolute
+
+.fade-shift-enter-from
+  opacity: 0
+
+.fade-shift-leave-to
+  position: absolute
+  transform: translate(-10rem)
+  opacity: 0
+  
+
+// .fade-shift-enter-to,
+// .fade-shift-leave-from
+//   animation: emerge ease .6s
+//* 
+
+@keyframes emerge
+  0%
+    // transform: scale(0)
+    opacity: 0
+  100%
+    // transform: scale(1)
+    opacity: 1
+
+
+
+//* bubble
+.bubble-move,
+.bubble-enter-active
+  transition: all .3s ease
+.bubble-leave-active
+  transition: all .3s ease, opacity .3s ease-out
+  position: absolute
+
+  // animation: shake-x linear .5s
+  // transition: all .3s .5s ease
+
+
+.bubble-enter-from,
+.bubble-leave-to
+  transform: scale(0)
+  
+.bubble-leave-to
+  opacity: 0
+
+.bubble-enter-to, 
+.bubble-leave-from
+  animation: shake-rotate linear 1s .4s
+//* 
+
+// ======
+// Technical
+._move-smooth-move
+  transition: all ease .3s
