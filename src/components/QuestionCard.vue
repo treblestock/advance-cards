@@ -16,15 +16,16 @@ const props = defineProps({
 
 
 
+
 const isShownAnswer = ref(false)
 const toggleIsShownAnswer = () => isShownAnswer.value = !isShownAnswer.value
-
 
 </script>
 
 <template>
   <div class="question-card"
     @click="toggleIsShownAnswer"
+    @dblclick="$emit('question-answered', question)"
   >
     <div class="question-card__question">{{ question }}</div>
     <div class="question-card__answer" :class="{_hidden: !isShownAnswer}">{{ answer }}</div>
@@ -36,6 +37,8 @@ const toggleIsShownAnswer = () => isShownAnswer.value = !isShownAnswer.value
 .question-card
   width: 60rem
   display: flex
+
+  cursor: pointer
   &__question
     padding: 1rem
     flex: 0 0 20%
