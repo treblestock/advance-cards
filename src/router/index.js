@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 
+
+import layoutDefault from '@/layouts/default.vue'
+
 function propsParser(route) {
   return Object.entries(route.params).reduce((props, [key, value]) => {
     // required to ignore params auto fitted by router,
@@ -15,35 +18,41 @@ const routes = [
   {
     path: '/', alias: '',
     name: 'home',
-    redirect: {
-      name: 'cardSets',
-    },
     props: true,
-    // component: home,
+    component: layoutDefault,
     children: [
       {
-        path: 'cardSets/:cardSetName',
-        name: 'cardSet',
+        path: 'sets',
+        name: 'sets',
         props: propsParser,
-        component: () => import('@/pages/cardSet.vue'),
+        component: () => import('@/pages/sets.vue'),
         children: [
           
         ],
       },
       {
-        path: 'cardSets',
-        name: 'cardSets',
+        path: 'sets/:setName',
+        name: 'set',
         props: propsParser,
-        component: () => import('@/pages/cardSets.vue'),
+        component: () => import('@/pages/set.vue'),
         children: [
           
         ],
       },
       {
-        path: 'stats/:cardSetName',
-        name: 'statsCardSet',
+        path: 'task-view-single-card/:setName',
+        name: 'taskViewSingleCard',
         props: propsParser,
-        component: () => import('@/pages/statsCardSet.vue'),
+        component: () => import('@/pages/taskViewSingleCard.vue'),
+        children: [
+          
+        ],
+      },
+      {
+        path: 'task-view-cards-list/:setName',
+        name: 'taskViewCardsList',
+        props: propsParser,
+        component: () => import('@/pages/taskViewCardsList.vue'),
         children: [
           
         ],
@@ -53,6 +62,15 @@ const routes = [
         name: 'stats',
         props: propsParser,
         component: () => import('@/pages/stats.vue'),
+        children: [
+          
+        ],
+      },
+      {
+        path: 'settings',
+        name: 'settings',
+        props: propsParser,
+        component: () => import('@/pages/settings.vue'),
         children: [
           
         ],

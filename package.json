@@ -21,8 +21,6 @@
     "postcss-mixins": "^9.0.4",
     "postcss-nested": "^6.0.0",
     "postcss-simple-vars": "^7.0.1",
-    "sass": "^1.57.1",
-    "sass-loader": "^13.2.0",
     "sugarss": "^4.0.1",
     "vite": "^3.2.3"
   }

@@ -5,7 +5,6 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 
 
-
 </script>
 
 <template>
@@ -14,29 +13,29 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
   </div>  
 </template>
 
-<style lang="sass">
-// Preset
-@import @/assets/css/_null
-@import @/assets/css/_helpers
+<style lang="pcss">
+@import '@/assets/css/_null';
 
 html,
-body 
-  font-size: 10px
+body {
+  font-size: 10px;
+}
 
 
 
-body 
-  font-size: 2rem
+body {
+  font-size: 2rem;
+}
 
-.container
-  max-width: 100rem
-  margin: 0 auto
-  padding: 2rem
+.container {
+  max-width: 100rem;
+  margin: 0 auto;
+  padding: 2rem;
+}
 </style>
 
-<style scoped lang="sass">
-@import @/assets/css/_helpers
-@import @/assets/css/_vars
+<style scoped lang="pcss">
+@import '@/assets/css/_vars';
 
 
 </style>

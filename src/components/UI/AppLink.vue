@@ -96,9 +96,9 @@ function propsParser(route) {
   </span>
 </template>
 
-<style scoped lang="sass">
-@import @/assets/css/_vars
-@import @/assets/css/_helpers
+<style scoped lang="pcss">
+@import @/assets/css/_vars;
+@import @/assets/css/_helpers;
 
 
 
