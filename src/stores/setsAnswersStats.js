@@ -2,14 +2,30 @@ import { defineStore } from "pinia"
 import {ref, computed, onMounted} from 'vue'
 
 
-import { isShouldRevisedQuestion } from '@/assets/helpers'
+import { 
+  isShouldRevisedQuestion,
+  isLoadingKnowledgeFinished,
+} from '@/assets/helpers'
 
 const SET_ANSWERS_STATS_DIR_PATH = './setsAnswersStats'
 const getCardSetPath = (setName) => SET_ANSWERS_STATS_DIR_PATH + '/' + setName + '.json'
 
 
 import setList from './setsAnswersStats/index.json'
+ 
+const DEFAULT_ANSWER_STATS = {
+  n: -1,
+  dateStart: new Date().toJSON().split('T')[0] // format: "2022-09-12"
+}
 
+
+
+
+
+
+
+
+// =============
 
 export const useStoreSetsAnswersStats = defineStore('storeSetsAnswersStats', () => {
   // all the card sets
@@ -32,10 +48,11 @@ export const useStoreSetsAnswersStats = defineStore('storeSetsAnswersStats', () 
 
   // update stats
   function updateAnswerStats (setName, question) {
-    if (isShouldRevisedQuestion(sets.value[question]) ) {
-      console.log('updated')
-      sets.value[setName][question].n++
-    }
+    const answerStats = sets.value[setName][question]
+    if (!answerStats) return sets.value[setName][question] = DEFAULT_ANSWER_STATS
+    if (!isLoadingKnowledgeFinished(answerStats.dateStart) ) return
+    console.log('updated')
+    if (isShouldRevisedQuestion(answerStats) ) return sets.value[setName][question].n++
   }
 
   return {

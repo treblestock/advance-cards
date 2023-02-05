@@ -76,20 +76,17 @@ const getDuration = (dateA, dateB, period = 'month') => {
 }
   
 // revise logic
-function isShouldRevisedQuestion(answerStats) {
-  if (!answerStats) return true // case, when there wasn't answer before
-
-  if (answerStats.n > 0) {
-    const initialDate = answerStats.dateStart
-    initialDate.setDate(initialDate.getDate() + 4)
-    const nextReviseDate = initialDate.getDate() + 3 * 2**answerStats.n
-    const isShouldRevise = new Date().getDate() > nextReviseDate
-    return isShouldRevise
-  }
-  return true
+function isLoadingKnowledgeFinished(dateStart) {
+  return new Date(Date.now() - dateStart).getDate() > 3 // actually "4"
 }
-
-
+function getNextReviseDate({n, dateStart}) {
+  return dateStart.getDay() + 2 * n
+}
+function isShouldRevisedQuestion({dateStart, n}) {
+  if (!arguments || !isLoadingKnowledgeFinished(dateStart)) return true 
+    // case, when there wasn't answer before: !arguments
+  return getNextReviseDate({n, dateStart}) < Date.now()
+}
 
 export
 {
@@ -109,5 +106,7 @@ export
 
 
   // revise logic
+  isLoadingKnowledgeFinished,
+  getNextReviseDate,
   isShouldRevisedQuestion,
 }
