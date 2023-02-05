@@ -2,6 +2,8 @@ import { defineStore } from "pinia"
 import {ref, computed, onMounted} from 'vue'
 
 
+import { isShouldRevisedQuestion } from '@/assets/helpers'
+
 const SET_ANSWERS_STATS_DIR_PATH = './setsAnswersStats'
 const getCardSetPath = (setName) => SET_ANSWERS_STATS_DIR_PATH + '/' + setName + '.json'
 
@@ -15,25 +17,32 @@ export const useStoreSetsAnswersStats = defineStore('storeSetsAnswersStats', () 
   const sets = ref({})
   
   
-  var loadSetAnswersStats = async (setName) => {
-    const setPath = getCardSetPath(setName)
-    const setData = (await import(setPath) ).default
-    const set = Array.isArray(setData) 
-      ? setData.reduce((acc, question) => (acc[question] = null, acc), {})
-      : setData
-    sets.value[setName] = set
+  async function loadSetAnswersStats(setName) {
+    const setAnswersStatsPath = getCardSetPath(setName)
+    const setAnswersStats = (await import(setAnswersStatsPath) ).default
+    for (const question in setAnswersStats) {
+      const answerStats = setAnswersStats[question]
+      answerStats.dateStart = new Date(answerStats.dateStart)
+    }
+    sets.value[setName] = setAnswersStats
   }
-
-    
   onMounted(() => {
     loadSetAnswersStats('nlc')
-    loadSetAnswersStats('words')
   })
+
+  // update stats
+  function updateAnswerStats (setName, question) {
+    if (isShouldRevisedQuestion(sets.value[question]) ) {
+      console.log('updated')
+      sets.value[setName][question].n++
+    }
+  }
 
   return {
     setsNames,
     sets,
     loadSetAnswersStats,
 
+    updateAnswerStats,
   }
 })

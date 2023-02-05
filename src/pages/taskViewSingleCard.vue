@@ -24,11 +24,17 @@ task.createTask()
 const currentQuestionData = computed(() => task.currentQuestionData)
 
 const isAnswered = ref(false)
-var onClick = () => !isAnswered.value ? showAnswer() : sendAnswer()
-var showAnswer = () => isAnswered.value = true
-function sendAnswer() {
-  
+function defineAnswerResault(event) {
+  const windowWidth = document.documentElement.clientWidth
+  const clickX = event.clientX
+  const xPercent = ~~(clickX / windowWidth * 100) 
+  return xPercent > 50 ? true : false // right -> true; left -> false
 }
+function onClick(event) {
+  !isAnswered.value ? showAnswer() : sendAnswer(defineAnswerResault(event) )
+}
+var showAnswer = () => isAnswered.value = true
+var sendAnswer = (answerResault) => task.answerQuestion(answerResault)
 watch(currentQuestionData, () => isAnswered.value = false)
 
 
@@ -39,11 +45,11 @@ watch(currentQuestionData, () => isAnswered.value = false)
 
     @pointerup="onClick"
   >
-    <!-- <TaskViewSingleCardQuestion
+    <TaskViewSingleCardQuestion
       :question="currentQuestionData.question"
       :answer="currentQuestionData.answer"
       :isShownAnswer="isAnswered"
-    ></TaskViewSingleCardQuestion> -->
+    ></TaskViewSingleCardQuestion>
   </div>
 </template>
 

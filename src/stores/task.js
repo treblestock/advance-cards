@@ -3,25 +3,22 @@ import { computed, watch } from "vue"
 
 import { useStoreSets } from '@/stores/sets.js'
 import { useStoreSetsAnswersStats } from '@/stores/setsAnswersStats.js'
-// const sets = useStoreSets()
-// const setAnswersStats = useStoreSetsAnswersStats()
 
 // helpers
-function isShouldRevisedQuestion(answerStats) {
-  
+import { shuffledSet, isShouldRevisedQuestion } from '@/assets/helpers'
+
+function* _createTaskIterator(toRevise) {
+  while(toRevise.size) {
+    for (const questionData of toRevise) {
+      yield questionData
+    }
+  }
 }
 
+let _taskIterator
 
 export const useStoreTask = defineStore('storeTask', {
   state: () => ({
-    // toRevise f(set, answerStats(set) ) => set.slice()
-    // createTask 
-    // sliceToRevise
-    // currentQuestionData f(toRevise) => toRevise.slice()
-    // stats onAnswer = f() => mut(stats, answerData) => stats
-    // _iterateTask
-    // answerQuestion -> mutate(task.stats) + _iterateTask
-
     setName: null,
 
     toRevise: new Set(),
@@ -29,6 +26,8 @@ export const useStoreTask = defineStore('storeTask', {
       question: null,
       answer: null,
     },
+
+    stats: {},
   }),
   getters: {
     
@@ -45,23 +44,38 @@ export const useStoreTask = defineStore('storeTask', {
           if (!setData.value || !setAnswersStats.value) return 
           for (const question in setData.value) {
             const answer = setData.value[question]
-            if (isShouldRevisedQuestion()) {
-              this.toRevise.add( {
+            if (isShouldRevisedQuestion(setAnswersStats.value[question])) {
+              this.toRevise.add({
                 question,
                 answer,
-              } )
+              })
             }
           }
-          console.log(this.toRevise.size)
+          this.toRevise = shuffledSet(this.toRevise)
+          _taskIterator = _createTaskIterator(this.toRevise)
+          this._iterateTask()
         },
       )
     }, 
     
     // flow
+    _iterateTask() {
+      this.currentQuestionData = _taskIterator.next().value
+    },
     answerQuestion(answerResault) {
-      // mutate(this.stats)
-      // mutate(this.toRevise)
-      // this.iterateTask()
+      if (!answerResault) {
+        this._iterateTask()
+        return
+      }
+      
+      console.log(this.toRevise.size)
+      // stats
+      this.stats[this.currentQuestionData.question] = true
+      useStoreSetsAnswersStats().updateAnswerStats(this.setName, this.currentQuestionData.question)
+
+      // iterate
+      this.toRevise.delete(this.currentQuestionData)
+      this._iterateTask()
     },
     onFinish() {
       // mutate(stats.prevTask)

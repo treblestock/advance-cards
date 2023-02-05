@@ -60,9 +60,9 @@ const props = defineProps({
 
     border-top: 1px solid $grey;
     
-    transition: all .2s linear;
 
     &._hidden {
+      /* transition: all .1s linear; */
       border: none;
       opacity: 0;
     }
