@@ -16,7 +16,6 @@ const props = defineProps({
   },
   isShownAnswer: {
     type: Boolean,
-    required: false,
     default: false,
   },
 })

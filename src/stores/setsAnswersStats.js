@@ -5,6 +5,8 @@ import {ref, computed, onMounted} from 'vue'
 import { 
   isShouldRevisedQuestion,
   isLoadingKnowledgeFinished,
+  getNextReviseDate,
+  parseDateHandler,
 } from '@/assets/helpers'
 
 const SET_ANSWERS_STATS_DIR_PATH = './setsAnswersStats'
@@ -12,6 +14,7 @@ const getCardSetPath = (setName) => SET_ANSWERS_STATS_DIR_PATH + '/' + setName +
 
 
 import setList from './setsAnswersStats/index.json'
+import { onRegister } from "./plugins/onRegister"
  
 const DEFAULT_ANSWER_STATS = {
   n: -1,
@@ -31,9 +34,23 @@ export const useStoreSetsAnswersStats = defineStore('storeSetsAnswersStats', () 
   // all the card sets
   const setsNames = ref(setList)
   const sets = ref({})
-  
+
+
+  // cache
+  function saveSetAnswersStatsCache(setName, value) {
+    localStorage.setItem('setAnswersStats' + setName, JSON.stringify(value) )
+  }
   
   async function loadSetAnswersStats(setName) {
+    // by cache
+    const cachedSetAnswersStats = JSON.parse(localStorage.getItem('setAnswersStats' + setName), parseDateHandler)
+    if (cachedSetAnswersStats) {
+      sets.value[setName] = cachedSetAnswersStats
+      return 
+    }
+
+
+    // by network
     const setAnswersStatsPath = getCardSetPath(setName)
     const setAnswersStats = (await import(setAnswersStatsPath) ).default
     for (const question in setAnswersStats) {
@@ -41,18 +58,24 @@ export const useStoreSetsAnswersStats = defineStore('storeSetsAnswersStats', () 
       answerStats.dateStart = new Date(answerStats.dateStart)
     }
     sets.value[setName] = setAnswersStats
+    saveSetAnswersStatsCache(setName, setAnswersStats)
   }
-  onMounted(() => {
-    loadSetAnswersStats('nlc')
-  })
+  function onRegister() {
+    setsNames.value.forEach(setName => loadSetAnswersStats(setName))
+  }
 
   // update stats
   function updateAnswerStats (setName, question) {
     const answerStats = sets.value[setName][question]
-    if (!answerStats) return sets.value[setName][question] = DEFAULT_ANSWER_STATS
+    if (!answerStats) {
+      sets.value[setName][question] = DEFAULT_ANSWER_STATS
+      saveSetAnswersStatsCache(setName, sets.value[setName])
+    }
     if (!isLoadingKnowledgeFinished(answerStats.dateStart) ) return
-    console.log('updated')
-    if (isShouldRevisedQuestion(answerStats) ) return sets.value[setName][question].n++
+    if (getNextReviseDate(answerStats) < Date.now() ) {
+      sets.value[setName][question].n++
+      saveSetAnswersStatsCache(setName, sets.value[setName])
+    }
   }
 
   return {
@@ -61,5 +84,7 @@ export const useStoreSetsAnswersStats = defineStore('storeSetsAnswersStats', () 
     loadSetAnswersStats,
 
     updateAnswerStats,
+
+    onRegister,
   }
 })

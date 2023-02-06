@@ -17,8 +17,15 @@ const props = defineProps({
 
 
 const task = useStoreTask()
-task.setName = props.setName
-task.createTask()
+onMounted(() => {
+  // console.log('upda')
+  task.setName = props.setName
+  task.createTask()
+})
+
+onBeforeRouteUpdate(() => {
+  // console.log('update')
+})
 
 
 const currentQuestionData = computed(() => task.currentQuestionData)
@@ -46,6 +53,7 @@ watch(currentQuestionData, () => isAnswered.value = false)
     @pointerup="onClick"
   >
     <TaskViewSingleCardQuestion
+      v-if="currentQuestionData.question"
       :question="currentQuestionData.question"
       :answer="currentQuestionData.answer"
       :isShownAnswer="isAnswered"

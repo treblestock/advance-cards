@@ -4,16 +4,25 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
+
+import useGetCountToReviseToday from '@/composables/useGetCountToReviseToday.js'
+
+
 import { useStoreSets } from '@/stores/sets.js'
+import { useStoreSetsAnswersStats } from '@/stores/setsAnswersStats.js'
+
 const sets = useStoreSets()
+const setsAnswersStats = useStoreSetsAnswersStats()
 
 const props = defineProps({
 
 })
 
 
-const totalCards = computed(() => 
-  sets.allSetCardsLength
+const countToReviseToday = computed(() => 
+  Object.keys(sets.sets).reduce((toRevise, setName) => {
+    return toRevise += useGetCountToReviseToday(sets.sets[setName], setsAnswersStats.sets[setName])
+  }, 0)
 )
 
 
@@ -26,7 +35,7 @@ const totalCards = computed(() =>
       all cards for today
     </div>
     <div class="set-widget__cards">
-      0 / {{ totalCards }}
+      to revise today: {{ countToReviseToday }}
     </div>
   </div>
 </template>

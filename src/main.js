@@ -16,8 +16,7 @@ app.use(helpers)
 import router from '@/router'
 app.use(router)
 
-import { createPinia } from 'pinia'
-const pinia = createPinia()
+import pinia from '@/stores'
 app.use(pinia)
 
 

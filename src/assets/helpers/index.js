@@ -60,7 +60,7 @@ const r = /([0-9]{4})-([0-9]{2})-([0-9]{2})/
 const isDate = str => r.exec(str)
 
 const parseDateHandler = (key, value) => 
-  isDate(value) ? separateDate(new Date(value)) : value
+  isDate(value) ? new Date(value) : value
 
 // toJSDate 
 const toJSDate = (dateObj) =>
@@ -80,12 +80,12 @@ function isLoadingKnowledgeFinished(dateStart) {
   return new Date(Date.now() - dateStart).getDate() > 3 // actually "4"
 }
 function getNextReviseDate({n, dateStart}) {
-  return dateStart.getDay() + 2 * n
+  return dateStart.getDate() + 2 ** n
 }
 function isShouldRevisedQuestion({dateStart, n}) {
   if (!arguments || !isLoadingKnowledgeFinished(dateStart)) return true 
     // case, when there wasn't answer before: !arguments
-  return getNextReviseDate({n, dateStart}) < Date.now()
+  return getNextReviseDate({n, dateStart}) < new Date().getDate()
 }
 
 export

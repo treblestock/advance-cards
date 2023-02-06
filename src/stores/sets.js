@@ -39,10 +39,9 @@ export const useStoreSets = defineStore('storeSets', () => {
   })
 
     
-  onMounted(() => {
-    loadSet('nlc')
-    loadSet('words')
-  })
+  function onRegister() {
+    setsNames.value.forEach(setName => loadSet(setName))    
+  }
 
   return {
     setsNames,
@@ -51,5 +50,6 @@ export const useStoreSets = defineStore('storeSets', () => {
     getSetCardsLength,
     allSetCardsLength,
 
+    onRegister,
   }
 })

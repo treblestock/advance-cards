@@ -37,11 +37,12 @@ export const useStoreTask = defineStore('storeTask', {
     createTask() {
       const setData = computed(() => useStoreSets().sets[this.setName])
       const setAnswersStats = computed(() => useStoreSetsAnswersStats().sets[this.setName])
-
       watch(
         [setData, setAnswersStats],
         () => {
-          if (!setData.value || !setAnswersStats.value) return 
+          if (!setData.value || !setAnswersStats.value) return // make logic, when loaded data 
+
+          this.toRevise.clear()
           for (const question in setData.value) {
             const answer = setData.value[question]
             if (isShouldRevisedQuestion(setAnswersStats.value[question])) {
@@ -55,6 +56,9 @@ export const useStoreTask = defineStore('storeTask', {
           _taskIterator = _createTaskIterator(this.toRevise)
           this._iterateTask()
         },
+        {
+          immediate: true,
+        }
       )
     }, 
     
@@ -63,16 +67,15 @@ export const useStoreTask = defineStore('storeTask', {
       this.currentQuestionData = _taskIterator.next().value
     },
     answerQuestion(answerResault) {
-      if (!answerResault) {
+      if (!answerResault) { // iterate to answer later
         this._iterateTask()
         return
       }
       
-      console.log(this.toRevise.size)
       // stats
       this.stats[this.currentQuestionData.question] = true
       useStoreSetsAnswersStats().updateAnswerStats(this.setName, this.currentQuestionData.question)
-
+      
       // iterate
       this.toRevise.delete(this.currentQuestionData)
       this._iterateTask()

@@ -20,6 +20,7 @@ const routes = [
     name: 'home',
     props: true,
     component: layoutDefault,
+    redirect: 'sets',
     children: [
       {
         path: 'sets',
