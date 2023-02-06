@@ -14,14 +14,27 @@ export const useStoreSets = defineStore('storeSets', () => {
   const setsNames = ref(setList)
   const sets = ref({})
   
+  // cache
+  function saveSetCache(setName, value) {
+    localStorage.setItem('set' + setName, JSON.stringify(value) )
+  }
   
-  var loadSet = async (setName) => {
+  async function loadSet(setName) {
+    // by cache
+    const cachedSet = JSON.parse(localStorage.getItem('set' + setName) )
+    if (cachedSet) {
+      sets.value[setName] = cachedSet
+      return 
+    }
+
+    // byNetwork
     const setPath = getCardSetPath(setName)
     const setData = (await import(setPath) ).default
     const set = Array.isArray(setData) 
       ? setData.reduce((acc, question) => (acc[question] = null, acc), {})
       : setData
     sets.value[setName] = set
+    saveSetCache(setName, set)
   }
 
 
