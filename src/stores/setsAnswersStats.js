@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
 import {ref, computed, onMounted} from 'vue'
 
+import useCaches from '@/composables/useCaches.js'
 
 import { 
   isShouldRevisedQuestion,
@@ -38,12 +39,12 @@ export const useStoreSetsAnswersStats = defineStore('storeSetsAnswersStats', () 
 
   // cache
   function saveSetAnswersStatsCache(setName, value) {
-    localStorage.setItem('setAnswersStats' + setName, JSON.stringify(value) )
+    useCaches('sets.answersStats.' + setName, value)
   }
   
   async function loadSetAnswersStats(setName) {
     // by cache
-    const cachedSetAnswersStats = JSON.parse(localStorage.getItem('setAnswersStats' + setName), parseDateHandler)
+    const cachedSetAnswersStats = JSON.parse(localStorage.getItem('sets.answersStats.' + setName), parseDateHandler)
     if (cachedSetAnswersStats) {
       sets.value[setName] = cachedSetAnswersStats
       return 

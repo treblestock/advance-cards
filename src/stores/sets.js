@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
-import {ref, computed, onMounted} from 'vue'
+import {ref, computed } from 'vue'
 
+import useCaches from '@/composables/useCaches.js'
 
 const CARD_SETS_DIR_PATH = './setsCards'
 const getCardSetPath = (setName) => CARD_SETS_DIR_PATH + '/' + setName + '.json'
@@ -16,12 +17,12 @@ export const useStoreSets = defineStore('storeSets', () => {
   
   // cache
   function saveSetCache(setName, value) {
-    localStorage.setItem('set' + setName, JSON.stringify(value) )
+    useCaches('sets.' + setName, value)
   }
   
   async function loadSet(setName) {
     // by cache
-    const cachedSet = JSON.parse(localStorage.getItem('set' + setName) )
+    const cachedSet = useCaches('sets.' + setName)
     if (cachedSet) {
       sets.value[setName] = cachedSet
       return 
