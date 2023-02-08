@@ -1,2 +1,4 @@
 $grey: #ccc;
 $grey-dark: #555;
+$primary: $grey;
+$secondary: $grey-dark;

@@ -1,3 +1,6 @@
+export { default as ABtn } from './ABtn.vue'
+export { default as Btn } from './Btn.vue'
+export { default as Popup } from './Popup.vue'
 export { default as Img } from './Img.vue'
 export { default as AppLink } from './AppLink.vue'
 export { default as Timer } from './Timer.vue'

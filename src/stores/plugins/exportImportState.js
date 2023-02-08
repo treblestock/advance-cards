@@ -1,14 +1,15 @@
-import download from '@/composables/useDownload'
+import donwload from '@/composables/useDownload'
 
 // pinia.store
 function importStoreState(state, reviver) {
+  console.log(JSON.parse(state, reviver))
   this.$patch(typeof state === 'string' ? JSON.parse(state, reviver) : state)
 }
 function toJSON() {
   return JSON.stringify(this.$state)
 }
 function exportStoreState() {
-  return download('pinia_' + this.$id, this.toJSON() )
+  return donwload('pinia_' + this.$id, this.toJSON() )
 }
 
 // pinia
@@ -33,7 +34,7 @@ export default function exportImportStoreState({app, pinia, store, options}) {
   
   // test
   // if (store.$id === 'stats') __test_doesReplaceCorrect(store)
-  // if (store.$id === 'stats') __test_downLoad(store)
+  // if (store.$id === 'stats') __test_donwload(store)
 
 
   // if (store.$id === 'stats') store.exportState()

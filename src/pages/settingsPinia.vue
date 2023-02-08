@@ -6,6 +6,14 @@ import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 import useGlobalProp from '@/composables/useGlobalProp.js'
 
+import PiniaStoreToolbar from '@/components/PiniaStoreToolbar.vue'
+
+import { useStoreStats } from '@/stores/stats.js'
+import { useStoreSets } from '@/stores/sets.js'
+import { useStoreAppConfig } from '@/stores/appConfig.js'
+const stats = useStoreStats()
+const sets = useStoreSets()
+const appConfig = useStoreAppConfig()
 
 const props = defineProps({
   
@@ -22,9 +30,9 @@ const stores = computed(() => pinia._s)
 <template>
   <div>
     <div
-      v-for="[key, value] in stores" :key="value"
+      v-for="[storeId] in stores" :key="storeId"
     >
-      {{ key }}
+      <PiniaStoreToolbar :storeId="storeId"/>
     </div>
   </div>
 </template>
