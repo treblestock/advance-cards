@@ -4,19 +4,64 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
+import { useStoreStats } from '@/stores/stats.js'
+const stats = useStoreStats()
 
 const props = defineProps({
   
 })
 
+
+const statsPages = ['global', 'today', 'prevTask']
+
 </script>
 
 <template>
-  stats
+  <div class="stats">
+    <div class="stats__nav stats-nav">
+      <div class="stats-nav__section"
+        v-for="page in statsPages" :key="page"
+      >
+        <AppLink class="stats-nav__link"
+          :to="`/stats/${page}`"
+        >{{ page }}</AppLink>
+      </div>
+    </div>
+    <div class="stats__page">
+      <RouterView></RouterView>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="pcss">
 @import '@/assets/css/_vars';
 
+.stats {
+  height: 100%;
+  &__nav {
+  }
+
+  &__page {
+    padding: 1rem 1.5rem;
+  }
+}
+.stats-nav {
+  display: flex;
+
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid $grey;
+
+  &__section {
+    flex: 0 0 calc(100% / 3);
+    text-align: center;
+
+    & + & {
+      border-left: 1px solid $grey;
+    }
+  }
+
+  &__link {
+  }
+}
 
 </style>

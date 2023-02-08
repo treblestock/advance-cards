@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import {ref, computed, onMounted} from 'vue'
+import {ref, computed } from 'vue'
 
 import useCaches from '@/composables/useCaches.js'
 
@@ -15,9 +15,8 @@ const getCardSetPath = (setName) => SET_ANSWERS_STATS_DIR_PATH + '/' + setName +
 
 
 import setList from './setsAnswersStats/index.json'
-import { onRegister } from "./plugins/onRegister"
  
-const DEFAULT_ANSWER_STATS = {
+const INITIAL_ANSWER_STATS = {
   n: -1,
   dateStart: new Date().toJSON().split('T')[0] // format: "2022-09-12"
 }
@@ -31,7 +30,7 @@ const DEFAULT_ANSWER_STATS = {
 
 // =============
 
-export const useStoreSetsAnswersStats = defineStore('storeSetsAnswersStats', () => {
+export const useStoreSetsAnswersStats = defineStore('setsAnswersStats', () => {
   // all the card sets
   const setsNames = ref(setList)
   const sets = ref({})
@@ -69,7 +68,7 @@ export const useStoreSetsAnswersStats = defineStore('storeSetsAnswersStats', () 
   function updateAnswerStats (setName, question) {
     const answerStats = sets.value[setName][question]
     if (!answerStats) {
-      sets.value[setName][question] = DEFAULT_ANSWER_STATS
+      sets.value[setName][question] = INITIAL_ANSWER_STATS
       saveSetAnswersStatsCache(setName, sets.value[setName])
     }
     if (!isLoadingKnowledgeFinished(answerStats.dateStart) ) return

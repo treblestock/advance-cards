@@ -64,7 +64,33 @@ const routes = [
         props: propsParser,
         component: () => import('@/pages/stats.vue'),
         children: [
-          
+          {
+            path: 'global',
+            name: 'statsGlobal',
+            props: propsParser,
+            component: () => import('@/pages/statsGlobal.vue'),
+            children: [
+              
+            ],
+          },
+          {
+            path: 'today',
+            name: 'statsToday',
+            props: propsParser,
+            component: () => import('@/pages/statsToday.vue'),
+            children: [
+              
+            ],
+          },
+          {
+            path: 'prevTask',
+            name: 'statsPrevTask',
+            props: propsParser,
+            component: () => import('@/pages/statsPrevTask.vue'),
+            children: [
+              
+            ],
+          },          
         ],
       },
       {
@@ -73,13 +99,29 @@ const routes = [
         props: propsParser,
         component: () => import('@/pages/settings.vue'),
         children: [
-          
+          {
+            path: 'pinia',
+            name: 'settingsPinia',
+            props: propsParser,
+            component: () => import('@/pages/settingsPinia.vue'),
+            children: [
+              
+            ],
+          },
+          {
+            path: 'appConfig',
+            name: 'settingsAppConfig',
+            props: propsParser,
+            component: () => import('@/pages/settingsAppConfig.vue'),
+            children: [
+              
+            ],
+          },
         ],
       },
     ],
   },
 ]
-
 
 const router = createRouter({
   routes,

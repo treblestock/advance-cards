@@ -88,6 +88,8 @@ function isShouldRevisedQuestion({dateStart, n}) {
   return getNextReviseDate({n, dateStart}) < new Date().getDate()
 }
 
+// export {default as parseFunction} from './parseFunction'
+
 export
 {
   getRandom,

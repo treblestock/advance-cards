@@ -10,7 +10,7 @@ const getCardSetPath = (setName) => CARD_SETS_DIR_PATH + '/' + setName + '.json'
 import setList from './setsCards/index.json'
 
 
-export const useStoreSets = defineStore('storeSets', () => {
+export const useStoreSets = defineStore('sets', () => {
   // all the card sets
   const setsNames = ref(setList)
   const sets = ref({})

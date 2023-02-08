@@ -1,8 +1,8 @@
 import { defineStore } from "pinia"
 
-export const useStoreAppConfig = defineStore('storeAppConfig', {
+export const useStoreAppConfig = defineStore('appConfig', {
   state: () => ({
-
+    
   }),
   getters: {
     

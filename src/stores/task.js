@@ -17,7 +17,7 @@ function* _createTaskIterator(toRevise) {
 
 let _taskIterator
 
-export const useStoreTask = defineStore('storeTask', {
+export const useStoreTask = defineStore('task', {
   state: () => ({
     setName: null,
 
