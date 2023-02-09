@@ -7,10 +7,10 @@ import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import useGetCountToReviseToday from '@/composables/useGetCountToReviseToday.js'
 
 import { useStoreSets } from '@/stores/sets.js'
-import { useStoreSetsAnswersStats } from '@/stores/setsAnswersStats.js'
+import { useStoreSetsRevisions } from '@/stores/setsRevisions.js'
 
 const sets = useStoreSets()
-const setsAnswersStats = useStoreSetsAnswersStats()
+const setsRevisions = useStoreSetsRevisions()
 
 const props = defineProps({
   setName: {
@@ -20,7 +20,7 @@ const props = defineProps({
 })
 
 const countToReviseToday = computed(() => 
-  useGetCountToReviseToday(sets.sets[props.setName], setsAnswersStats.sets[props.setName])
+  useGetCountToReviseToday(sets.sets[props.setName], setsRevisions.sets[props.setName])
 )
 
 

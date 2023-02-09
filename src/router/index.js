@@ -50,10 +50,10 @@ const routes = [
         ],
       },
       {
-        path: 'task-view-cards-list/:setName',
-        name: 'taskViewCardsList',
+        path: 'taskReport',
+        name: 'taskReport',
         props: propsParser,
-        component: () => import('@/pages/taskViewCardsList.vue'),
+        component: () => import('@/pages/taskReport.vue'),
         children: [
           
         ],
@@ -61,14 +61,17 @@ const routes = [
       {
         path: 'stats',
         name: 'stats',
+        redirect: {
+          name: 'statsTotal',
+        },
         props: propsParser,
         component: () => import('@/pages/stats.vue'),
         children: [
           {
-            path: 'global',
-            name: 'statsGlobal',
+            path: 'total',
+            name: 'statsTotal',
             props: propsParser,
-            component: () => import('@/pages/statsGlobal.vue'),
+            component: () => import('@/pages/statsTotal.vue'),
             children: [
               
             ],

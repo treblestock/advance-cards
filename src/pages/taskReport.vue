@@ -5,31 +5,28 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 
-import SetStats from '@/components/SetStats.vue'
-import SetTask from '@/components/SetTask.vue'
-
+import { useStoreTask } from '@/stores/task.js'
 
 const props = defineProps({
-  setName: {
-    type: String,
-    required: true,
-  },
+  
 })
+
+const task = useStoreTask()
+const prevTaskRawStats = task.stats
+console.log(prevTaskRawStats)
+
 
 
 </script>
 
 <template>
-  <div class="set">
-    <SetStats class="set__stats"></SetStats>
-    <SetTask class="set__task"
-      :setName="setName"
-    ></SetTask>
+  <div class="task-report">
+    task report
   </div>
 </template>
 
 <style scoped lang="pcss">
-@import '@/assets/css/_vars';
+@import "@/assets/css/_vars";
 
 
 </style>

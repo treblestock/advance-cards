@@ -4,34 +4,53 @@ import useCaches from '@/composables/useCaches.js'
 
 export const useStoreStats = defineStore('stats', {
   state: () => ({
-    /*
-      todo: 
-        - update global
-        - update today
-        - define computed props
-        - define onAnswer updates (global, today)
-    */ 
+    total: {
+      setsCount: null,
+      revisedSetsCount: null,
+      cardsCount: null,
+      revisedCardsCount: null,
 
-    // typeof global === typeof today === typeof prevTask
-    // onAnswer: () => {mut(global), mut(today) }
-    // task.onFinish: () => stats.prevTask = task.stats, task.stats = null
-    global: {
-      setsAnswered: useCaches('stats.global.' + 'setsAnswered'),
-      questionsAnswered: useCaches('stats.global.' + 'questionsAnswered'),
-      questionsAnsweredSuccessfully: useCaches('stats.global.' + 'questionsAnsweredSuccessfully'),
-      accurance: useCaches('stats.global.' + 'accurance'),
-      time: useCaches('stats.global.' + 'time'),
-      timePerQuestionsAnsweredSuccessfully: useCaches('stats.global.' + 'timePerQuestionsAnsweredSuccessfully'),
-    },
-    today: {
-      setsAnswered: null,
-      questionsAnswered: null,
-      questionsAnsweredSuccessfully: null,
       accurance: null,
       time: null,
-      timePerQuestionsAnsweredSuccessfully: null,
+      timePerCard: null,
+      timePerSet: null,
     },
+    today: {
+      setsCount: null,
+      revisedSetsCount: null,
+      cardsCount: null,
+      revisedCardsCount: null,
+
+      accurance: null,
+      time: null,
+      timePerCard: null,
+      timePerSet: null,
+    },
+    // set: {
+    //   cardsCount: null,
+    //   revisedCardsCount: null,
+    //   revisedSetCount: null,
+
+    //   accurance: null,
+    //   time: null,
+    //   timePerCard: null,
+
+    //   totalRevisionsCount: null,
+    //   loadingRevisionsCount: null,
+    //   afterLoadingRevisionsCount: null,
+    //   timePerRevision: null,
+
+    //   creationDate: null,
+    //   revisionCycleNumber: null,
+    //   prevRevision: null,
+    //   nextRevision: null,
+    // },
     prevTask: {
+
+    },
+
+
+    sets: {
 
     },
   }),
@@ -39,8 +58,8 @@ export const useStoreStats = defineStore('stats', {
     
   },
   actions: {
-    onAnswer(answerResault) {
-
+    onAnswer(revisionAnswer) {
+      console.log(revisionAnswer)
     },
     _loadTodayStats() {
       const lastSaveDate = new Date(useCaches('stats.today') || 0)
@@ -56,17 +75,12 @@ export const useStoreStats = defineStore('stats', {
         }
       }
     },
-    _updateTodayStats() {
-      this.setsAnswered = 12
-      this.questionsAnswered = 12
-      this.questionsAnsweredSuccessfully = 12
-      this.accurance = 12
-      this.time = 12
-      this.timePerQuestionsAnsweredSuccessfully = 12
+
+    loadSetStats() {
+
     },
     onRegister() {
-      this._loadTodayStats()
-      this._updateTodayStats()
+      
     }
   },
 })

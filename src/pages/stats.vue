@@ -4,6 +4,8 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
+import useRouteChildren from '@/composables/useRouteChildren.js'
+
 import { useStoreStats } from '@/stores/stats.js'
 const stats = useStoreStats()
 
@@ -12,7 +14,11 @@ const props = defineProps({
 })
 
 
-const statsPages = ['global', 'today', 'prevTask']
+const statsPages = computed(
+  () => useRouteChildren('stats').map(option => option.path) 
+)
+
+
 
 </script>
 

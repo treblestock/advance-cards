@@ -4,33 +4,26 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
-
 import StatsRow from '@/components/StatsRow.vue'
 
-import { useStoreStats } from '@/stores/stats.js'
-const stats = useStoreStats()
 
 const props = defineProps({
   
 })
 
-
-const statsData = computed(() => stats.global)
-
 </script>
 
 <template>
-  <div class="stats-rows">
-    <StatsRow class="stats-row"
-      v-for="statValue, statName in statsData" :key="statName" 
-      :statName="statName"
-      :statValue="statValue"
-    ></StatsRow>
+  <div class="set-stats">
+    stats
+    <!-- <StatsRow class="set-stats__row"
+      
+    ></StatsRow> -->
   </div>
 </template>
 
-<style scoped>
-
+<style scoped lang="pcss">
+@import "@/assets/css/_vars";
 
 
 </style>

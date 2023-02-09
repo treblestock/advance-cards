@@ -4,6 +4,7 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
+import { toHumanCase } from '@/assets/helpers/str'
 
 const props = defineProps({
   statName: {
@@ -20,8 +21,8 @@ const props = defineProps({
 
 <template>
   <div class="stats-row">
-    <div class="stats-row__stat-name">{{ statName }}: </div>
-    <div class="stats-row__stat-value">{{ statValue }}</div>
+    <div class="stats-row__stat-name">{{ toHumanCase(statName) }}: </div>
+    <div class="stats-row__stat-value">{{ statValue || '_'}}</div>
   </div>
 </template>
 

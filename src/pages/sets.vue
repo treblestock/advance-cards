@@ -9,7 +9,7 @@ import SetAllWidget from '@/components/SetAllWidget.vue'
 import SetWidget from '@/components/SetWidget.vue'
 
 import { useStoreSets } from '@/stores/sets.js'
-import { useStoreSetsAnswersStats } from '@/stores/setsAnswersStats.js'
+import { useStoreSetsRevisions } from '@/stores/setsRevisions.js'
 
 const props = defineProps({
 
@@ -17,7 +17,7 @@ const props = defineProps({
 
 
 const sets = useStoreSets()
-const setsAnswersStats = useStoreSetsAnswersStats()
+const setsRevisions = useStoreSetsRevisions()
 
 
 const setsNames = computed(() => sets.setsNames)

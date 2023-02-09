@@ -18,31 +18,37 @@ const props = defineProps({
 
 const task = useStoreTask()
 onMounted(() => {
-  // console.log('upda')
   task.setName = props.setName
   task.createTask()
 })
 
-onBeforeRouteUpdate(() => {
-  // console.log('update')
-})
 
 
-const currentQuestionData = computed(() => task.currentQuestionData)
+const currentCard = computed(() => task.currentCard)
 
 const isAnswered = ref(false)
-function defineAnswerResault(event) {
+function createRevisionAnswer(event) {
   const windowWidth = document.documentElement.clientWidth
   const clickX = event.clientX
   const xPercent = ~~(clickX / windowWidth * 100) 
-  return xPercent > 50 ? true : false // right -> true; left -> false
+  const isCorrect = xPercent > 50 ? true : false // right -> true; left -> false
+
+  return {
+    isCorrect,
+    time: Date.now(),
+    set: task.setName,
+    question: currentCard.value.question,
+  }
 }
 function onClick(event) {
-  !isAnswered.value ? showAnswer() : sendAnswer(defineAnswerResault(event) )
+  !isAnswered.value ? showAnswer() : sendAnswer(createRevisionAnswer(event) )
 }
 var showAnswer = () => isAnswered.value = true
-var sendAnswer = (answerResault) => task.answerQuestion(answerResault)
-watch(currentQuestionData, () => isAnswered.value = false)
+var hideAnswer = () => isAnswered.value = false
+var sendAnswer = (revisionAnswer) => {
+  hideAnswer()
+  task.onAnswer(revisionAnswer)
+}
 
 
 </script>
@@ -53,9 +59,9 @@ watch(currentQuestionData, () => isAnswered.value = false)
     @pointerup="onClick"
   >
     <TaskViewSingleCardQuestion
-      v-if="currentQuestionData.question"
-      :question="currentQuestionData.question"
-      :answer="currentQuestionData.answer"
+      v-if="currentCard?.question"
+      :question="currentCard.question"
+      :answer="currentCard.answer"
       :isShownAnswer="isAnswered"
     ></TaskViewSingleCardQuestion>
   </div>

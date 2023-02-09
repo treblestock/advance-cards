@@ -1,11 +1,16 @@
 import { defineStore } from "pinia"
 import { computed, watch } from "vue"
 
+
 import { useStoreSets } from '@/stores/sets.js'
-import { useStoreSetsAnswersStats } from '@/stores/setsAnswersStats.js'
+import { useStoreSetsRevisions } from '@/stores/setsRevisions.js'
+import { useStoreStats } from '@/stores/stats.js'
 
 // helpers
 import { shuffledSet, isShouldRevisedQuestion } from '@/assets/helpers'
+
+
+import useGlobalProp from '@/composables/useGlobalProp.js'
 
 function* _createTaskIterator(toRevise) {
   while(toRevise.size) {
@@ -22,12 +27,30 @@ export const useStoreTask = defineStore('task', {
     setName: null,
 
     toRevise: new Set(),
-    currentQuestionData: {
+    currentCard: {
       question: null,
       answer: null,
     },
 
-    stats: {},
+    stats: new Set(),
+      // stats implementations:
+      // set is better than arr, because cards shows is undefined initially
+      // 1) set.push(revisionAnswer) - just collect the full data and 
+      //    the report will know how to format
+      //    if you want extract data as array use:
+      //    
+      //      const arr = []
+      //      set.forEach(item => mut(arr, item) )
+      //      return arr
+      // 2) {}, but object collects data refered to question, not revision
+      //    That is why with such case you have to know formatting of stats
+      //    during task iteration, not report display.
+      //    You'll have to make complex structure:
+      //    task.stats.question = {
+      //      success: Number,
+      //      fail: Number,
+      //      date: Date // what should be date? the first answer, the last?
+      //    }
   }),
   getters: {
     
@@ -36,16 +59,16 @@ export const useStoreTask = defineStore('task', {
     // initialization
     createTask() {
       const setData = computed(() => useStoreSets().sets[this.setName])
-      const setAnswersStats = computed(() => useStoreSetsAnswersStats().sets[this.setName])
+      const setRevisionStats = computed(() => useStoreSetsRevisions().sets[this.setName])
       watch(
-        [setData, setAnswersStats],
+        [setData, setRevisionStats],
         () => {
-          if (!setData.value || !setAnswersStats.value) return // make logic, when loaded data 
+          if (!setData.value || !setRevisionStats.value) return // make logic, when loaded data 
 
           this.toRevise.clear()
           for (const question in setData.value) {
             const answer = setData.value[question]
-            if (isShouldRevisedQuestion(setAnswersStats.value[question])) {
+            if (isShouldRevisedQuestion(setRevisionStats.value[question])) {
               this.toRevise.add({
                 question,
                 answer,
@@ -54,35 +77,39 @@ export const useStoreTask = defineStore('task', {
           }
           this.toRevise = shuffledSet(this.toRevise)
           _taskIterator = _createTaskIterator(this.toRevise)
-          this._iterateTask()
+          this.currentCard = _taskIterator.next().value
         },
         {
           immediate: true,
         }
       )
     }, 
+
+    // stats
+    _updateTaskStats(revisionAnswer) {
+      this.stats.add(revisionAnswer)
+    },
     
     // flow
-    _iterateTask() {
-      this.currentQuestionData = _taskIterator.next().value
+    _updateTask(revisionAnswer) {
+      if (revisionAnswer.isCorrect) this.toRevise.delete(this.currentCard)
+      this.currentCard = _taskIterator.next().value
+      if (!this.currentCard) this.onFinish()
     },
-    answerQuestion(answerResault) {
-      if (!answerResault) { // iterate to answer later
-        this._iterateTask()
-        return
-      }
-      
+
+    onAnswer(revisionAnswer) {
       // stats
-      this.stats[this.currentQuestionData.question] = true
-      useStoreSetsAnswersStats().updateAnswerStats(this.setName, this.currentQuestionData.question)
-      
-      // iterate
-      this.toRevise.delete(this.currentQuestionData)
-      this._iterateTask()
+      this._updateTaskStats(revisionAnswer)
+      const stats = useStoreStats()
+      stats.onAnswer(revisionAnswer)
+      // task flow
+      this._updateTask(revisionAnswer)
     },
+
+    // end
     onFinish() {
       // mutate(stats.prevTask)
-      // redirect('/reportPage')
+      this.$router.push({name: 'taskReport'})
     },
   },
 })

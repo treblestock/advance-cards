@@ -9,10 +9,10 @@ import useGetCountToReviseToday from '@/composables/useGetCountToReviseToday.js'
 
 
 import { useStoreSets } from '@/stores/sets.js'
-import { useStoreSetsAnswersStats } from '@/stores/setsAnswersStats.js'
+import { useStoreSetsRevisions } from '@/stores/setsRevisions.js'
 
 const sets = useStoreSets()
-const setsAnswersStats = useStoreSetsAnswersStats()
+const setsRevisions = useStoreSetsRevisions()
 
 const props = defineProps({
 
@@ -21,7 +21,7 @@ const props = defineProps({
 
 const countToReviseToday = computed(() => 
   Object.keys(sets.sets).reduce((toRevise, setName) => {
-    return toRevise += useGetCountToReviseToday(sets.sets[setName], setsAnswersStats.sets[setName])
+    return toRevise += useGetCountToReviseToday(sets.sets[setName], setsRevisions.sets[setName])
   }, 0)
 )
 

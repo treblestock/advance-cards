@@ -7,7 +7,7 @@ const CARD_SETS_DIR_PATH = './setsCards'
 const getCardSetPath = (setName) => CARD_SETS_DIR_PATH + '/' + setName + '.json'
 
 
-import setList from './setsCards/index.json'
+import setList from './_SETS.json'
 
 
 export const useStoreSets = defineStore('sets', () => {

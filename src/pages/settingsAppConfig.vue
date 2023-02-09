@@ -12,7 +12,7 @@ const props = defineProps({
 </script>
 
 <template>
-  {{ $route.fullPath }}
+  <div>{{ $route.fullPath }}</div>
 </template>
 
 <style scoped lang="pcss">

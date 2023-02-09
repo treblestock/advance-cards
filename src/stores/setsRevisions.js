@@ -10,11 +10,11 @@ import {
   parseDateHandler,
 } from '@/assets/helpers'
 
-const SET_ANSWERS_STATS_DIR_PATH = './setsAnswersStats'
+const SET_ANSWERS_STATS_DIR_PATH = './setsRevisions'
 const getCardSetPath = (setName) => SET_ANSWERS_STATS_DIR_PATH + '/' + setName + '.json'
 
 
-import setList from './setsAnswersStats/index.json'
+import setList from './_SETS.json'
  
 const INITIAL_ANSWER_STATS = {
   n: -1,
@@ -30,38 +30,38 @@ const INITIAL_ANSWER_STATS = {
 
 // =============
 
-export const useStoreSetsAnswersStats = defineStore('setsAnswersStats', () => {
+export const useStoreSetsRevisions = defineStore('setsRevisions', () => {
   // all the card sets
   const setsNames = ref(setList)
   const sets = ref({})
 
 
   // cache
-  function saveSetAnswersStatsCache(setName, value) {
-    useCaches('sets.answersStats.' + setName, value)
+  function saveSetRevisionsCache(setName, value) {
+    useCaches('sets.revisions.' + setName, value)
   }
   
-  async function loadSetAnswersStats(setName) {
+  async function loadSetRevisions(setName) {
     // by cache
-    const cachedSetAnswersStats = JSON.parse(localStorage.getItem('sets.answersStats.' + setName), parseDateHandler)
-    if (cachedSetAnswersStats) {
-      sets.value[setName] = cachedSetAnswersStats
+    const cachedSetRevisions = JSON.parse(localStorage.getItem('sets.revisions.' + setName), parseDateHandler)
+    if (cachedSetRevisions) {
+      sets.value[setName] = cachedSetRevisions
       return 
     }
 
 
     // by network
-    const setAnswersStatsPath = getCardSetPath(setName)
-    const setAnswersStats = (await import(setAnswersStatsPath) ).default
-    for (const question in setAnswersStats) {
-      const answerStats = setAnswersStats[question]
+    const setRevisionsPath = getCardSetPath(setName)
+    const setRevisions = (await import(setRevisionsPath) ).default
+    for (const question in setRevisions) {
+      const answerStats = setRevisions[question]
       answerStats.dateStart = new Date(answerStats.dateStart)
     }
-    sets.value[setName] = setAnswersStats
-    saveSetAnswersStatsCache(setName, setAnswersStats)
+    sets.value[setName] = setRevisions
+    saveSetRevisionsCache(setName, setRevisions)
   }
   function onRegister() {
-    setsNames.value.forEach(setName => loadSetAnswersStats(setName))
+    setsNames.value.forEach(setName => loadSetRevisions(setName))
   }
 
   // update stats
@@ -69,19 +69,19 @@ export const useStoreSetsAnswersStats = defineStore('setsAnswersStats', () => {
     const answerStats = sets.value[setName][question]
     if (!answerStats) {
       sets.value[setName][question] = INITIAL_ANSWER_STATS
-      saveSetAnswersStatsCache(setName, sets.value[setName])
+      saveSetRevisionsCache(setName, sets.value[setName])
     }
     if (!isLoadingKnowledgeFinished(answerStats.dateStart) ) return
     if (getNextReviseDate(answerStats) < Date.now() ) {
       sets.value[setName][question].n++
-      saveSetAnswersStatsCache(setName, sets.value[setName])
+      saveSetRevisionsCache(setName, sets.value[setName])
     }
   }
 
   return {
     setsNames,
     sets,
-    loadSetAnswersStats,
+    loadSetRevisions,
 
     updateAnswerStats,
 

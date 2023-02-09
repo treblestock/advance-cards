@@ -143,6 +143,7 @@ function onClick(path) {
 }
 .merge-leave-active {
   position: absolute;
+  display: none;
 }
 
 .merge-enter-from,

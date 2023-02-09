@@ -90,6 +90,8 @@ function isShouldRevisedQuestion({dateStart, n}) {
 
 // export {default as parseFunction} from './parseFunction'
 
+export { toHumanCase } from './str.js'
+
 export
 {
   getRandom,

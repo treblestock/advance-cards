@@ -28,12 +28,12 @@ const stores = computed(() => pinia._s)
 </script>
 
 <template>
-  <div>
-    <div
+  <div class="pinia">
+    <PiniaStoreToolbar class="pinia__toolbar"
       v-for="[storeId] in stores" :key="storeId"
-    >
-      <PiniaStoreToolbar :storeId="storeId"/>
-    </div>
+      :storeId="storeId"
+
+    />
   </div>
 </template>
 
@@ -41,6 +41,12 @@ const stores = computed(() => pinia._s)
 @import "@/assets/css/_vars";
 
 
+.pinia {
+
+  &__toolbar {
+    margin-bottom: 1rem;
+  }
+}
 
 
 </style>
