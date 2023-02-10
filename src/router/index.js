@@ -13,14 +13,13 @@ function propsParser(route) {
   , {})
 }
 
-const rootPath = import.meta.env.BASE_URL
 
 const routes = [
   {
-    path: rootPath,
+    path: '/', alias: '',
     name: 'home',
     props: true,
-    component: layoutDefault,
+    component: () => import('@/layouts/default.vue'),
     redirect: 'sets',
     children: [
       {
