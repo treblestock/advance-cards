@@ -16,16 +16,13 @@ function propsParser(route) {
 
 const routes = [
   {
-    path: '/', alias: '',
+    path: '/',
     name: 'home',
     props: true,
     component: () => import('@/layouts/default.vue'),
-    redirect: {
-      name: 'sets'
-    },
     children: [
       {
-        path: 'sets',
+        path: 'sets', alias: '',
         name: 'sets',
         props: propsParser,
         component: () => import('@/pages/sets.vue'),
