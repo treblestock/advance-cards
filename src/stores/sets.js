@@ -1,34 +1,42 @@
-import { defineStore } from "pinia"
+import { defineStore, setMapStoreSuffix } from "pinia"
 import {ref, computed } from 'vue'
 
-import useCaches from '@/composables/useCaches.js'
+import useStorage from '@/composables/useStorage.js'
+import useDownload from '@/composables/useDownload.js'
 
 const CARD_SETS_DIR_PATH = './setsCards'
 const getCardSetPath = (setName) => CARD_SETS_DIR_PATH + '/' + setName + '.json'
 
 
-import setList from './_SETS.json'
+const IS_ALLOWED_FS_IMPORT_JSON_DATA = false
+// import _setsList from './_SETS.json'
 
 
 export const useStoreSets = defineStore('sets', () => {
   // all the card sets
-  const setsNames = ref(setList)
+  // const setsList = ref(_setsList)
+  const setsList = ref(useStorage('setsList') || [])
+  
   const sets = ref({})
   
-  // cache
-  function saveSetCache(setName, value) {
-    useCaches('sets.' + setName, value)
+  function saveSetCache(setName, cards) {
+    useStorage('sets.cards.' + setName, cards)
   }
   
   async function loadSet(setName) {
     // by cache
-    const cachedSet = useCaches('sets.' + setName)
+    const cachedSet = useStorage('sets.cards.' + setName)
     if (cachedSet) {
       sets.value[setName] = cachedSet
-      return 
+      return
     }
-
     // byNetwork
+
+    if (!IS_ALLOWED_FS_IMPORT_JSON_DATA) return 
+    _loadDataFromFS(setName)
+  }
+
+  async function _loadDataFromFS(setName) {
     const setPath = getCardSetPath(setName)
     const setData = (await import(setPath) ).default
     const set = Array.isArray(setData) 
@@ -52,17 +60,44 @@ export const useStoreSets = defineStore('sets', () => {
     }, 0)
   })
 
+  // up-download
+  function exportSet(setName) {
+    const json = JSON.stringify(sets.value[setName])
+    return json
+  }
+  function importSet(setName, data) {
+    const cards = typeof data === "string" ? JSON.parse(data) : data
+    sets.value[setName] = cards
+    if (!setsList.value.includes(setName) ) {
+      setsList.value.push(setName)
+      useStorage('setsList', setsList.value)
+    }
+    saveSetCache(setName, cards)
+  }
+  function deleteSet(setName) {
+    delete sets.value[setName]
+    setsList.value = setsList.value.filter(name => name !== setName)
+    useStorage('sets.cards.' + setName, null)
+    useStorage('setsList', setsList.value)
+  }
+
+
     
   function onRegister() {
-    setsNames.value.forEach(setName => loadSet(setName))    
+    setsList.value.forEach(setName => loadSet(setName))    
   }
 
   return {
-    setsNames,
+    setsList,
     sets,
     loadSet,
     getSetCardsLength,
     allSetCardsLength,
+
+    // up-download
+    exportSet,
+    importSet,
+    deleteSet,
 
     onRegister,
   }

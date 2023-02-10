@@ -7,7 +7,6 @@ import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import useGlobalProp from '@/composables/useGlobalProp.js'
 import useUpload from '@/composables/useUpload.js'
 
-import PiniaImportStoreStateForm from '@/components/PiniaImportStoreStateForm.vue'
 
 const props = defineProps({
   storeId: {
@@ -30,12 +29,12 @@ function onData(data) {
   <div class="pinia-store-toolbar">
     <div class="pinia-store-toolbar__store-name">{{ storeId }}</div>
     <div class="pinia-store-toolbar__btns">
-      <Btn class="pinia-store-toolbar__export pinia-store-toolbar__btn"
-        @click="() => store.exportState()"
-      >export</Btn>
-      <Btn class="pinia-store-toolbar__import pinia-store-toolbar__btn"
+      <Btn class="pinia-store-toolbar__upload pinia-store-toolbar__btn"
         @click="() => useUpload({onload: ({data}) => onData(data) })"
-      >import</Btn>
+      >upload</Btn>
+      <Btn class="pinia-store-toolbar__download pinia-store-toolbar__btn"
+        @click="() => store.exportState()"
+      >download</Btn>
     </div>
 
   </div>
@@ -52,14 +51,15 @@ function onData(data) {
 
   }
   &__btns {
-
+    display: flex;
+    gap: 1rem;
   }
 
   &__btn {
   }
-  &__export {
+  &__download {
   }
-  &__import {
+  &__upload {
   }
 }
 

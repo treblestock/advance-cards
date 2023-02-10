@@ -2,3 +2,11 @@ $grey: #ccc;
 $grey-dark: #555;
 $primary: $grey;
 $secondary: $grey-dark;
+
+
+/* paddings */
+$nav-padding: 1rem 1.5rem;
+
+
+/* size */
+$icon-size: 4rem;

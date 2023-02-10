@@ -36,7 +36,7 @@ function createRevisionAnswer(event) {
   return {
     isCorrect,
     time: Date.now(),
-    set: task.setName,
+    setName: task.setName,
     question: currentCard.value.question,
   }
 }

@@ -28,7 +28,8 @@ import pinia from '@/stores'
 // This is imposible with js modules
 // Such an approach gives you less restrictions further
 pinia.use( ({store}) => {
-  store.$router = markRaw(router) 
+  store.$router = markRaw(router)
+  store.$pinia = markRaw(pinia)
 })
 
 

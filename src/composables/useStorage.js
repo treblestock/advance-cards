@@ -1,4 +1,5 @@
-function useCaches(itemName, value) {
+import { watch } from "vue"
+function useStorage(itemName, value) {
   function _get(itemName) {
     return JSON.parse(localStorage.getItem(itemName) )
   }
@@ -14,4 +15,16 @@ function useCaches(itemName, value) {
       ? _delete(itemName)
       : _get(itemName)
 }
-export default useCaches
+export default useStorage
+
+
+
+function setAutoCaching(storageKey, dep) {
+  watch(
+    dep,
+    newValue => useStorage(storageKey, newValue),
+    { deep: true }
+  )
+}
+
+

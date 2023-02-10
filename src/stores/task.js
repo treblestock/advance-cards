@@ -24,14 +24,18 @@ let _taskIterator
 
 export const useStoreTask = defineStore('task', {
   state: () => ({
+    // task
     setName: null,
-
     toRevise: new Set(),
+    cardsCount: null,
+    timeStart: null,
+    timeFinish: null,
     currentCard: {
       question: null,
       answer: null,
     },
-
+    
+    // stats
     stats: new Set(),
       // stats implementations:
       // set is better than arr, because cards shows is undefined initially
@@ -56,6 +60,15 @@ export const useStoreTask = defineStore('task', {
     
   },
   actions: {
+    reset() {
+      this.timeFinish = null,
+      this.timeStart = null,
+      this.cardsCount = null,
+      this.currentCard.answer = null,
+      this.currentCard.question = null,
+      this.toRevise.clear()
+      this.stats.clear()
+    },
     // initialization
     createTask() {
       const setData = computed(() => useStoreSets().sets[this.setName])
@@ -65,7 +78,6 @@ export const useStoreTask = defineStore('task', {
         () => {
           if (!setData.value || !setRevisionStats.value) return // make logic, when loaded data 
 
-          this.toRevise.clear()
           for (const question in setData.value) {
             const answer = setData.value[question]
             if (isShouldRevisedQuestion(setRevisionStats.value[question])) {
@@ -76,12 +88,13 @@ export const useStoreTask = defineStore('task', {
             }
           }
           this.toRevise = shuffledSet(this.toRevise)
+          // task
           _taskIterator = _createTaskIterator(this.toRevise)
+          this.cardsCount = this.toRevise.size
+          this.timeStart = Date.now()
           this.currentCard = _taskIterator.next().value
         },
-        {
-          immediate: true,
-        }
+        {immediate: true,}
       )
     }, 
 
@@ -94,6 +107,7 @@ export const useStoreTask = defineStore('task', {
     _updateTask(revisionAnswer) {
       if (revisionAnswer.isCorrect) this.toRevise.delete(this.currentCard)
       this.currentCard = _taskIterator.next().value
+      // this.$patch({currentCard: _taskIterator.next().value}) // pinia.autoCacher
       if (!this.currentCard) this.onFinish()
     },
 
@@ -102,6 +116,8 @@ export const useStoreTask = defineStore('task', {
       this._updateTaskStats(revisionAnswer)
       const stats = useStoreStats()
       stats.onAnswer(revisionAnswer)
+      // revisions
+      useStoreSetsRevisions().updateRevisionCardData(revisionAnswer)
       // task flow
       this._updateTask(revisionAnswer)
     },
@@ -109,6 +125,7 @@ export const useStoreTask = defineStore('task', {
     // end
     onFinish() {
       // mutate(stats.prevTask)
+      this.timeFinish = Date.now()
       this.$router.push({name: 'taskReport'})
     },
   },

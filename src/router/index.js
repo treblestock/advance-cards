@@ -103,6 +103,15 @@ const routes = [
         component: () => import('@/pages/settings.vue'),
         children: [
           {
+            path: 'setsUpDownload',
+            name: 'settingsSetsUpDownload',
+            props: propsParser,
+            component: () => import('@/pages/settingsSetsUpDownload.vue'),
+            children: [
+              
+            ],
+          },
+          {
             path: 'pinia',
             name: 'settingsPinia',
             props: propsParser,

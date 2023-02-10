@@ -18,7 +18,7 @@ const src = computed(() => props.src ? props.src : '/img/test.jpg')
 </template>
 
 <style scoped lang="pcss">
-@import @/assets/css/_vars;
-@import @/assets/css/_helpers;
+@import '@/assets/css/_vars';
+@import '@/assets/css/_helpers';
 
 </style>

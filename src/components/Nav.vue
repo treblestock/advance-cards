@@ -35,7 +35,7 @@ const props = defineProps({
 @import '@/assets/css/_vars';
 
 .nav {
-  padding: 0.5rem;
+  padding: $nav-padding;
   display: flex;
   height: 100%;
 

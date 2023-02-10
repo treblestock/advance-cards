@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-import useCaches from '@/composables/useCaches.js'
+import useStorage from '@/composables/useStorage.js'
 
 export const useStoreStats = defineStore('stats', {
   state: () => ({
@@ -59,19 +59,19 @@ export const useStoreStats = defineStore('stats', {
   },
   actions: {
     onAnswer(revisionAnswer) {
-      console.log(revisionAnswer)
+      
     },
     _loadTodayStats() {
-      const lastSaveDate = new Date(useCaches('stats.today') || 0)
+      const lastSaveDate = new Date(useStorage('stats.today') || 0)
       const isCachedStatsActual = lastSaveDate.getDate() === new Date().getDate()
       if (!isCachedStatsActual) {
         for (const statName in this.today) {
-          useCaches('stats.today.' + statName, 0)
+          useStorage('stats.today.' + statName, 0)
         }
-        useCaches('stats.today', new Date())
+        useStorage('stats.today', new Date())
       } else {
         for (const statName in this.today) {
-          this.today[statName] = useCaches('stats.today.' + statName)
+          this.today[statName] = useStorage('stats.today.' + statName)
         }
       }
     },

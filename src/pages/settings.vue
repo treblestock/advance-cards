@@ -4,7 +4,7 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter, useRoute } from 'vue-router'
 
-
+import { toHumanCase } from '@/assets/helpers'
 import useRouteChildren from '@/composables/useRouteChildren.js'
 
 const props = defineProps({
@@ -58,7 +58,7 @@ function onClick(path) {
           >{{ path }}</span> -->
 
 
-          {{ path }}
+          {{ toHumanCase(path) }}
         </AppLink>
       </TransitionGroup>
     </div>

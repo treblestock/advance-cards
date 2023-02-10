@@ -90,6 +90,7 @@ function isShouldRevisedQuestion({dateStart, n}) {
 
 // export {default as parseFunction} from './parseFunction'
 
+var toTimeInSec = time => (time / 1000).toFixed(1) + ' sec'
 export { toHumanCase } from './str.js'
 
 export
@@ -107,6 +108,8 @@ export
   parseDateHandler,
   toJSDate,
   getDuration,
+
+  toTimeInSec,
 
 
   // revise logic

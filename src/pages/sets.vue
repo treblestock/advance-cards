@@ -20,7 +20,7 @@ const sets = useStoreSets()
 const setsRevisions = useStoreSetsRevisions()
 
 
-const setsNames = computed(() => sets.setsNames)
+const setsNames = computed(() => sets.setsList)
 
 
 </script>
