@@ -1,0 +1,1 @@
+import{_ as e,o as s,a as _,t as o}from"./index.e1f24323.js";const n={__name:"settingsAppConfig",props:{},setup(p){return(t,a)=>(s(),_("div",null,o(t.$route.fullPath),1))}},c=e(n,[["__scopeId","data-v-df2f5834"]]);export{c as default};

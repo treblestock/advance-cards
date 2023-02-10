@@ -12,10 +12,7 @@ import cssFunctions from 'postcss-functions'
 import cssSimpleVars from 'postcss-simple-vars'
 
 
-
-
-// https://vitejs.dev/config/
-export default defineConfig({
+const sharedConfigPart = {
   plugins: [vue({
     
   }), svgLoader()],
@@ -35,4 +32,18 @@ export default defineConfig({
       ],
     }
   }  
+}
+
+
+// https://vitejs.dev/config/
+export default defineConfig(({command}) => {
+  if (command === 'serve') {
+    return {
+      ...sharedConfigPart,
+    }
+  }
+  return {
+    ...sharedConfigPart,
+    base: '/advance-cards/',
+  }
 })

@@ -1,0 +1,1 @@
+function c(e,r){function o(t){return JSON.parse(localStorage.getItem(t))}function u(t,n){return localStorage.setItem(t,JSON.stringify(n))}function l(t,n){return localStorage.removeItem(t)}return r?u(e,r):r===null?l(e):o(e)}export{c as u};
