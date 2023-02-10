@@ -10,6 +10,8 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 import { RouterLink } from 'vue-router'
 
+const BASE_URL = import.meta.env.BASE_URL || '/'
+
 const props = defineProps({
   ...RouterLink.props,
   inactiveClass: String,
@@ -21,7 +23,7 @@ const isExternalLink = computed(() =>
 )
 const toStringifiedParams = computed(() => {
   return typeof props.to === 'string' 
-    ? props.to
+    ? withBaseUrl(props.to)
     : ({
     ...props.to,
     params: Object.entries(props?.to?.params || {}).reduce((props, [key, value]) =>
@@ -30,6 +32,10 @@ const toStringifiedParams = computed(() => {
     , {})
   })  
 })
+
+function withBaseUrl(string) {
+  return (BASE_URL + string).replace('//', '/')
+}
 
 function propsParser(route) {
   return Object.entries(route.params).reduce((props, [key, value]) =>

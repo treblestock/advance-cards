@@ -20,9 +20,10 @@ const routes = [
     name: 'home',
     props: true,
     component: () => import('@/layouts/default.vue'),
+    redirect: { name: 'sets' },
     children: [
       {
-        path: 'sets', alias: '',
+        path: 'sets',
         name: 'sets',
         props: propsParser,
         component: () => import('@/pages/sets.vue'),
