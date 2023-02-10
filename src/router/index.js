@@ -13,10 +13,11 @@ function propsParser(route) {
   , {})
 }
 
+const rootPath = import.meta.env.BASE_URL
 
 const routes = [
   {
-    path: '/', alias: '',
+    path: rootPath,
     name: 'home',
     props: true,
     component: layoutDefault,
