@@ -16,7 +16,7 @@ function propsParser(route) {
 
 const routes = [
   {
-    path: '/',
+    path: import.meta.env.BASE_URL,
     name: 'home',
     props: true,
     component: () => import('@/layouts/default.vue'),
