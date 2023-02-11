@@ -5,69 +5,49 @@ export default {
 </script>
 
 <script setup>
-import {ref, computed, watch} from 'vue'
-import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
-
+import {ref, computed} from 'vue'
 import { RouterLink } from 'vue-router'
 
-const BASE_URL = import.meta.env.BASE_URL || '/'
+import { modifyRouteTo } from '@/router/helpers'
 
 const props = defineProps({
   ...RouterLink.props,
-  inactiveClass: String,
 })
-
 
 const isExternalLink = computed(() => 
   typeof props.to === 'string' && props.to.startsWith('http')
 )
-const toStringifiedParams = computed(() => {
-  return typeof props.to === 'string' 
-    ? withBaseUrl(props.to)
-    : ({
-    ...props.to,
-    params: Object.entries(props?.to?.params || {}).reduce((props, [key, value]) =>
-      (value !== undefined || value !== null) 
-        ? (props[key] = JSON.stringify(value), props) : props
-    , {})
-  })  
-})
 
-function withBaseUrl(string) {
-  return (BASE_URL + string).replace('//', '/')
-}
 
-function propsParser(route) {
-  return Object.entries(route.params).reduce((props, [key, value]) =>
-     // required to ignore params auto fitted by router,
-     // which were not provided by developer passing params: {}
-     value  ? (props[key] = JSON.parse(value), props) : props 
-  , {})
-}
-
-function onClick(p) {
-  console.log(p)
-}
 </script>
 
 <template>
-  <a v-if="isExternalLink" :="$attrs" :href="to" target="_blank">
+  <a class="link" target="_blank"
+    v-if="isExternalLink" 
+    :href="to" 
+    :="$attrs" 
+  >
     <slot />
   </a>
-  <RouterLink
+  <RouterLink class="link"
     v-else
     :="$attrs"
-    :to="toStringifiedParams"
+    :to="modifyRouteTo(to)"
     v-slot="slotProps"
   >
-    <slot 
+    <slot class="link__inner"
       v-bind="slotProps"
     />
   </RouterLink>
 </template>
 
-<style scoped >
+<style scoped lang="pcss">
 
+.link {
+  &__inner {
+    user-select: none;
+  }
+}
 
 
 </style>

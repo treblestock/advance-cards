@@ -23,8 +23,8 @@ body {
 
 
 
-body {
-  font-size: 2rem;
+body > *{
+  font-size: 1.8rem;
 }
 
 .container {
@@ -32,6 +32,15 @@ body {
   margin: 0 auto;
   padding: 2rem;
 }
+
+body::-webkit-scrollbar {
+  /* display: none; */
+}
+body {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;
+}
+
 </style>
 
 <style scoped lang="pcss">

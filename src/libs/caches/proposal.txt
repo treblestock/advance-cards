@@ -1,0 +1,120 @@
+// api
+  // native js structure with public api
+  caches.get('item')
+  caches.set('item', 'itemValue')
+  caches.delete('item')
+  caches.has('item')
+
+  // proxy
+  caches.item               // get
+  caches.item = 'someValue' // set
+  caches.item = null        // delete (1)
+  delete caches.item        // delete (2)
+  'item' in caches          // has (1)
+  caches.item               // has (2)
+    // => someValue || null
+    // e.g
+    if (caches.item) doSmth 
+    caches.item || fallback
+    caches.item ? onHas : onAbsent
+
+
+
+
+tricks in implementation:
+  - modular lib (import sugarApi from 'lib/v-1', import withOptimizatoins from 'lib'/v-2)
+    .// Code developmant and architecture with ability to import the enough configuration
+    .// 1) layered (impl -> sugarApi -> )
+    .//    + easy
+    .//    + no config
+    .// 2) composition
+    .//    Provides tools for extensions and you should config the entity yourself
+    .//    + may choose what you need, when there is variety
+    .//    - should config
+    .//    - should follow the interfaces and order of layering 
+    .//   
+  - meta properties in localStorage (see further the aim)
+  - chunking big data
+    - chunking driven flow 
+      .// := make i/o works arround chunks
+      .// 
+      .// Example:
+      .// const chunks = getChunksCount(entity)
+      .// if (!chunks) return caches.get(entity)
+      .// 
+      .// const chunkKeyBase = getKey(entity)
+      .// 
+      .// for (let i = 1; i <= chunks; i++) {
+      .//   const chunkKey = chunkKeyBase + i
+      .//   const chunkData = cahces.get(chunkKey)
+      .// }
+      .// 
+
+  - flat view of hierarchical nesting data
+    - 'obj.' => object props localStorage keys[]
+      .// Example:
+      .// caches.get('company.workers') => {
+      .//   const childKey = caches.get('company.')
+      .//   const workers = caches.get(childKey)
+      .//   return workers
+      .//   
+      .//   // const childKey = args.reduce(recursiveGetKey)
+      .// }
+  - Map: entityDomainName => cachesEntityKey |> caches.get(entityKey)
+    .// + no need to remember the name of entity in cachesNamingSystem
+    .// - difficult migration
+    .//   aliases and export/import may help
+    .//   or some special API e.g. caches.move(from, to)
+    .//   
+    .// implementations:
+    .// 1) domain dictionary config:
+    .//    caches.registerEntity(weakRef, key)
+    .// 2) naming system + toCachesCase 
+    .//    + (noConfig, memory) 
+    .//    + runtime extensible without registrations
+    .//    + no  manual routine
+    .//    + toCachesCase := pureFunction -> output is a Singletone -> noCollisions
+    .//      ++ Absolute automative process (of mapping not domain dictionary:) )
+    .//      ++ This means you may implement and forget. SRP, information expert, no brain consumpsion
+    .//    - strictNaming
+    .// 
+    - Map: entityCodeLink => entityKey |> caches.get(entityKey)
+      .// := use links in program instead of
+      .// address keys or special names.
+      .// Simply provide a link and you'll the value!
+      .// No need even to remeber domain naming just links
+      .// 
+      .// In general it looks like:
+      .// entityLink => entityDomainName => entityCachesKey |> caches.get(entityCachesKey)
+      .// But the links are different in each program run.
+      .// Therefore, under the hood you have to provide
+      .// Special config of mapping (runtime registration)
+      .// 
+      .// The best api:
+      .// const data = store.someData
+      .// caches.makeLink(data, 'entityDomainName') // 1)
+      .// caches.makeLink({entityDomainName: data}) // 2)
+      .// caches.get(data) === caches.get('entityDomainName') 
+        - MetaProgramming feature:
+        .// if data is a function -> function.name ->
+        .// you may provide function instace, and get entityName
+        .// if you follow domain naming in code: 
+        .// caches.makeLink(function) // this is enough!
+        .// 
+        .// multiple registrations: //! antipattern
+        .// // module-1.js
+        .// const entity = ...
+        .// caches.makeLink(entity, 'entityDomainName')
+        .// 
+        .// // module-2.js
+        .// const anotherEntityWithTheSameData = ...
+        .// caches.makeLink(entity, 'entityDomainName')
+        .// 
+        .// -> 2 links -> oneData
+        .// But it is very dangerous and antipattern as you have to sync data
+        .// The easiest way is to use import of main owner 
+        .// (Some module defaines entity and shares for consumers.
+        .// One supplier, many consumers)
+        .// Moreover multiple registration leads to data duplication
+      .// 
+    

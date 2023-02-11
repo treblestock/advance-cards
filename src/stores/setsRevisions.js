@@ -10,19 +10,25 @@ import {
   parseDateHandler,
 } from '@/assets/helpers'
 
-const SET_ANSWERS_STATS_DIR_PATH = './setsRevisions'
-const getCardSetPath = (setName) => SET_ANSWERS_STATS_DIR_PATH + '/' + setName + '.json'
 
-
-// import setList from './_SETS.json'
+import { useStoreSets } from '@/stores/sets.js'
+const setsStore = useStoreSets()
 
 
 const INITIAL_ANSWER_STATS = {
   n: -1,
-  dateStart: new Date().toJSON().split('T')[0] // format: "2022-09-12"
+  dateStart: new Date().toJSON() // format: "2022-09-12"
 }
 
-
+function createInitialStats(setCards) {
+  const stats = {}
+  for (const question in setCards) {
+    if (!setCards.hasOwnProperty(question) ) continue
+    stats[question] = {...INITIAL_ANSWER_STATS}
+  }
+  console.log(stats)
+  return stats
+}
 
 
 
@@ -44,21 +50,15 @@ export const useStoreSetsRevisions = defineStore('setsRevisions', () => {
   async function loadSetRevisions(setName) {
     // by cache
     const cachedSetRevisions = JSON.parse(localStorage.getItem('sets.revisions.' + setName), parseDateHandler)
+    // console.log(cachedSetRevisions)
     if (cachedSetRevisions) {
       sets.value[setName] = cachedSetRevisions
-      return 
+      return
     }
 
-
-    // by network
-    const setRevisionsPath = getCardSetPath(setName)
-    const setRevisions = (await import(setRevisionsPath) ).default
-    for (const question in setRevisions) {
-      const revisionCardData = setRevisions[question]
-      revisionCardData.dateStart = new Date(revisionCardData.dateStart)
-    }
-    sets.value[setName] = setRevisions
-    saveSetRevisionsCache(setName, setRevisions)
+    const setCards = setsStore.sets[setName]
+    sets.value[setName] = createInitialStats(setCards)
+    saveSetRevisionsCache(setName, sets.value[setName])
   }
   function onRegister() {
     setsList.value.forEach(setName => loadSetRevisions(setName))

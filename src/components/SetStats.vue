@@ -24,6 +24,8 @@ const props = defineProps({
 
 <style scoped lang="pcss">
 @import "@/assets/css/_vars";
-
+.set-stats{
+  
+}
 
 </style>

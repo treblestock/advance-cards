@@ -2,22 +2,30 @@
 import {ref, computed, watch} from 'vue'
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 
-import Nav from '@/components/Nav.vue'
 
 
 const props = defineProps({
   
 })
 
+const PAGES_NAMES = ['sets', 'stats', 'settings']
+
 </script>
 
 <template>
   <div class="layout">
-    <main class="main">
+    <main class="layout__main">
       <RouterView></RouterView>
     </main>
-    <footer class="footer">
-      <Nav class="nav"></Nav>
+    <footer class="layout__footer">
+      <NavTabs class="layout__nav top-level-nav">
+        <AppLink class="top-level-nav__link"
+          v-for="pageName in PAGES_NAMES" :key="pageName"
+          :to="{ name: pageName }"
+        >
+          {{ pageName }}
+        </AppLink>
+      </NavTabs>
     </footer>
   </div>
 </template>
@@ -31,26 +39,27 @@ const props = defineProps({
 
   display: flex;
   flex-direction: column;
-}
-.main {
-  flex: 1 1 auto;
-  padding: 0.5rem;
-}
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  
-  background-color: #fff;
-  z-index: 1;
+
+  &__main {
+    flex: 1 1 auto;
+    padding: 0.5rem;
+  }
+  &__footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    background-color: #fff;
+    z-index: 1;
 
 
-  flex: 0 1 5rem;
+    flex: 0 1 5rem;
 
-  border-top: 1px solid $grey;
-}
-.nav {
+    border-top: 1px solid $grey;
+  }
+  &__nav {
+  }
 }
 
 

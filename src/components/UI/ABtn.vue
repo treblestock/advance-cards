@@ -4,7 +4,7 @@
 
 <template>
   <AppLink class="btn">
-    <slot>click!</slot>
+    <slot></slot>
   </AppLink>  
 </template>
 

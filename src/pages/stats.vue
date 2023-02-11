@@ -1,13 +1,9 @@
 <script setup>
 import {ref, computed, watch} from 'vue'
-import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { toHumanCase } from '@/assets/helpers'
 
 import useRouteChildren from '@/composables/useRouteChildren.js'
-
-import { useStoreStats } from '@/stores/stats.js'
-const stats = useStoreStats()
 
 const props = defineProps({
   
@@ -25,13 +21,14 @@ const statsPages = computed(
 <template>
   <div class="stats">
     <div class="stats__nav stats-nav">
-      <div class="stats-nav__section"
-        v-for="page in statsPages" :key="page"
-      >
+      <NavTabs class="stats-nav__section">
         <AppLink class="stats-nav__link"
+          v-for="page in statsPages" :key="page"
           :to="`/stats/${page}`"
-        >{{ page }}</AppLink>
-      </div>
+        >
+          {{ toHumanCase(page) }}
+        </AppLink>
+      </NavTabs>
     </div>
     <div class="stats__page">
       <RouterView></RouterView>
@@ -53,18 +50,10 @@ const statsPages = computed(
   }
 }
 .stats-nav {
-  display: flex;
-
-  padding: 1rem 1.5rem;
   border-bottom: 1px solid $grey;
 
   &__section {
-    flex: 0 0 calc(100% / 3);
-    text-align: center;
 
-    & + & {
-      border-left: 1px solid $grey;
-    }
   }
 
   &__link {

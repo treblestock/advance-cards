@@ -1,15 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 
-
-import layoutDefault from '@/layouts/default.vue'
-
 function propsParser(route) {
-  return Object.entries(route.params).reduce((props, [key, value]) => {
+  return Object.entries(route.params).reduce((props, [key, value]) => 
     // required to ignore params auto fitted by router,
     // which were not provided by developer passing params: {}
-    return value  ? (props[key] = JSON.parse(value), props) : props 
-  }
+    value  ? (props[key] = JSON.parse(value), props) : props 
   , {})
 }
 
@@ -27,8 +23,35 @@ const routes = [
         name: 'sets',
         props: propsParser,
         component: () => import('@/pages/sets.vue'),
+        redirect: {name: 'newSet' },
         children: [
-          
+          {
+            path: 'newSet',
+            name: 'newSet',
+            props: propsParser,
+            component: () => import('@/pages/newSet.vue'),
+            redirect: { name: 'newSetUploadForm' },
+            children: [
+              {
+                path: 'manual/:setName?',
+                name: 'newSetManualForm',
+                props: propsParser,
+                component: () => import('@/pages/newSetManualForm.vue'),
+                children: [
+                  
+                ],
+              },
+              {
+                path: 'upload',
+                name: 'newSetUploadForm',
+                props: propsParser,
+                component: () => import('@/pages/newSetUploadForm.vue'),
+                children: [
+                  
+                ],
+              },
+            ],
+          },
         ],
       },
       {
@@ -102,15 +125,6 @@ const routes = [
         props: propsParser,
         component: () => import('@/pages/settings.vue'),
         children: [
-          {
-            path: 'setsUpDownload',
-            name: 'settingsSetsUpDownload',
-            props: propsParser,
-            component: () => import('@/pages/settingsSetsUpDownload.vue'),
-            children: [
-              
-            ],
-          },
           {
             path: 'pinia',
             name: 'settingsPinia',

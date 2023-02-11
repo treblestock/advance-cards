@@ -1,5 +1,5 @@
 <script setup>
-import MyIcon from '@/assets/img/icons/crud/delete.svg'
+import MyIcon from '@/assets/img/icons/crud/edit.svg'
 
 const props = defineProps({
   

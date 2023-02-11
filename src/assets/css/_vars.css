@@ -1,12 +1,13 @@
 $grey: #ccc;
+$grey-light: #eee;
 $grey-dark: #555;
 $primary: $grey;
 $secondary: $grey-dark;
 
 
 /* paddings */
-$nav-padding: 1rem 1.5rem;
-
+$border-radius: 4px;
+$nav-padding: 1.5rem 1.5rem;
 
 /* size */
 $icon-size: 4rem;
