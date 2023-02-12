@@ -1,11 +1,9 @@
 <script setup>
-import {ref, computed, watch, nextTick} from 'vue'
+import {ref, computed, watch, nextTick } from 'vue'
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { useStoreSetsCards } from '@/stores/setsCards.js'
 
-
-import { useStoreSets } from '@/stores/sets.js'
 
 const props = defineProps({
   setName: {
@@ -14,9 +12,11 @@ const props = defineProps({
   }
 })
 
+
+
 // 
 const cardsHtml = ref()
-const sets = useStoreSets()
+const setsCards = useStoreSetsCards()
 
 // initialization
 const EMPTY_CARDS_FORM_VALUE = [
@@ -26,17 +26,30 @@ const EMPTY_CARDS_FORM_VALUE = [
 const formSetName = ref(props.setName)
 
 
-const cards = ref(
-  props.setName
-    ? Object.entries((sets.sets[props.setName]) )
+const cardsFormData = ref(null)
+setCardsFormData()
+
+function setCardsFormData(newSetName) {
+  cardsFormData.value = props.setName
+    ? Object.entries(setsCards.sets[newSetName || props.setName] )
     : EMPTY_CARDS_FORM_VALUE
+}
+
+const storeData = computed(() => 
+  props.setName 
+    ? setsCards.sets[props.setName] 
+    : {}
+)
+
+watch(
+  storeData,
+  newValue => setCardsFormData(),
 )
 
 
 
-
 // submition
-function onSubmitTry(event) {
+function onSubmitTry() {
   if (!formSetName.value) {
     alert('fill in set name')
     return
@@ -44,33 +57,33 @@ function onSubmitTry(event) {
 
   const newCards = createSetData()
   props.setName 
-    ? updateSet(props.setName, formSetName.value, newCards)
+    ? updateSet(props.setName, newCards)
     : createSet(formSetName.value, newCards)
 }
 
 function createSetData() {
-  const entries = cards.value.filter(cardEntry => cardEntry[0] && cardEntry[1] )
+  const entries = cardsFormData.value.filter(cardEntry => cardEntry[0] && cardEntry[1] )
   return Object.fromEntries(entries)
 }
 
-function updateSet(setName, newSetName, setCards) {
-  sets.updateSet(setName, newSetName, setCards)
+function updateSet(setName, setCards) {
+  setsCards.updateSet(setName, setCards)
 }
 function createSet(setName, setCards) {
-  sets.createSet(setName, setCards)
+  setsCards.createSet(setName, setCards)
 }
 
 
 // Placeholder
 const isLastRowEmpty = computed(() => {
-  const lastCard = cards.value[cards.value.length - 1]
+  const lastCard = cardsFormData.value[cardsFormData.value.length - 1]
   return !lastCard.length
 })
 
 
 function onPlaceholderFocus(cardSide) {
-  cards.value.push([])
-  const lastCardInd = cards.value.length - 1
+  cardsFormData.value.push([])
+  const lastCardInd = cardsFormData.value.length - 1
   
   nextTick(() => {
     const row = cardsHtml.value[lastCardInd]
@@ -82,8 +95,8 @@ function onPlaceholderFocus(cardSide) {
 
 // clear
 function clearRaw(cardInd) {
-  cards.value[cardInd] = []
-  if (cardInd === cards.value.length - 1) return
+  cardsFormData.value[cardInd] = []
+  if (cardInd === cardsFormData.value.length - 1) return
   cardsHtml.value[cardInd].classList.add('_hidden')
 }
 
@@ -107,7 +120,7 @@ function clearRaw(cardInd) {
       </div>
 
       <div class="form__row form-row"
-        v-for="card, ind in cards" :key="ind"
+        v-for="card, ind in cardsFormData" :key="ind"
         ref="cardsHtml"
       >
         <Input type="text" class="form-row__question" placeholder="question"

@@ -3,8 +3,8 @@ import NewSetUploadForm from '@/components/NewSetUploadForm.vue'
 
 import useUpload from '@/composables/useUpload.js'
 
-import { useStoreSets } from '@/stores/sets.js'
-const sets = useStoreSets()
+import { useStoreSetsCards } from '@/stores/setsCards.js'
+const setsCards = useStoreSetsCards()
 
 const props = defineProps({
   setName: {
@@ -22,7 +22,7 @@ const props = defineProps({
 <template>
   <div class="new-set-upload-form">
     <NewSetUploadForm 
-      @create="(setName) => useUpload({onload: (file) => sets.importSet(setName, file.data)} )"
+      @create="(setName) => useUpload({onload: (file) => setsCards.importSet(setName, file.data)} )"
     ></NewSetUploadForm>
   </div>
 </template>

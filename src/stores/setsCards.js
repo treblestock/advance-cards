@@ -1,20 +1,20 @@
 import { defineStore } from "pinia"
 import {ref, computed } from 'vue'
 
-import useStorage from '@/composables/useStorage.js'
+import { cache } from '@/assets/helpers'
 
+import { useStoreSetsRevisions } from '@/stores/setsRevisions.js'
 
-// const _useStoreSets = defineStore('sets', () => {
-export const useStoreSets = defineStore('sets', () => {
-  // all the card sets
-  const setsList = ref(useStorage('setsList') || [])
+export const useStoreSetsCards = defineStore('setsCards', () => {
+  // all the card setsCards
+  const setsList = ref(cache.setsList || [])
   const sets = ref({})
   function saveSetCache(setName, cards) {
-    useStorage('sets.cards.' + setName, cards)
+    cache['setCards' + setName] = cards
   }
   
   async function loadSet(setName) {
-    const cachedSet = useStorage('sets.cards.' + setName)
+    const cachedSet = cache['setCards' + setName]
     if (cachedSet) sets.value[setName] = cachedSet
   }
 
@@ -40,21 +40,30 @@ export const useStoreSets = defineStore('sets', () => {
     saveSetCache(setName, cards)
 
     setsList.value.push(setName)
-    useStorage('setsList', setsList.value)
+    cache.setsList = setsList.value
+
+    const revisions = useStoreSetsRevisions()
+    revisions.createInitialStats(setName, cards)
   }
   function getSet(setName) {
     return sets.value[setName]
   }
-  function updateSet(setName, newSetName, cards) {
+  function updateSet(setName, cards) {
     if (!sets.value[setName]) throw new Error('there is no set with name ' + setName)
     sets.value[setName] = cards
-    saveSetCache(setName, cards)
+    cache['setCards' + setName] = cards
+    
+    const revisions = useStoreSetsRevisions()
+    revisions.updateRevisions(setName, cards)
   }
   function deleteSet(setName) {
     delete sets.value[setName]
-    useStorage('sets.cards.' + setName, null)
+    cache['setCards' + setName] = null
     setsList.value = setsList.value.filter(name => name !== setName)
-    useStorage('setsList', setsList.value)
+    cache.setsList = setsList.value
+
+    const revisions = useStoreSetsRevisions()
+    revisions.deleteRevisions(setName)
   }
 
   // up-download
@@ -64,13 +73,19 @@ export const useStoreSets = defineStore('sets', () => {
   }
   function importSet(setName, data) {
     const cards = typeof data === "string" ? JSON.parse(data) : data
-    sets.value[setName] = cards
-    if (!setsList.value.includes(setName) ) {
-      setsList.value.push(setName)
-      useStorage('setsList', setsList.value)
-    }
-    saveSetCache(setName, cards)
+    !setsList.value.includes(setName) 
+      ? createSet(setName, cards)
+      : updateSet(setName, cards)
   }
+  // function importSet(setName, data) {
+  //   const cards = typeof data === "string" ? JSON.parse(data) : data
+  //   sets.value[setName] = cards
+  //   if (!setsList.value.includes(setName) ) {
+  //     setsList.value.push(setName)
+  //     cache.setsList = setsList.value
+  //   }
+  //   saveSetCache(setName, cards)
+  // }
 
 
     
@@ -98,11 +113,3 @@ export const useStoreSets = defineStore('sets', () => {
     onRegister,
   }
 })
-
-// const useStoreSets = () => {
-//   console.log('before')
-//   const store = _useStoreSets()
-//   console.log('after')
-//   return store
-// }
-// export {useStoreSets,}

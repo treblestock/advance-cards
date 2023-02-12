@@ -2,8 +2,6 @@
 import { ref, computed, watch } from 'vue'
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted  } from 'vue'
 
-import { useStoreAutoCacher } from '@/stores/autoCacher.js'
-const autoCacher = useStoreAutoCacher()
 
 </script>
 

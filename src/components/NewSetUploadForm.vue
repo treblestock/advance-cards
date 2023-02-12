@@ -1,12 +1,7 @@
 <script setup>
 import {ref, computed, watch} from 'vue'
-import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-
-import IconDelete from '@/components/icons/delete.vue'
 import IconUpload from '@/components/icons/upload.vue'
-import IconDownload from '@/components/icons/download.vue'
 
 const props = defineProps({
 
@@ -20,7 +15,7 @@ const emit = defineEmits([
 const newSetName = ref('')
 
 function onClick() {
-  if (!newSetName) {
+  if (!newSetName.value) {
     alert('write a set name')
     return
   }

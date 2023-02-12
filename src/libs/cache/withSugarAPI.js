@@ -38,18 +38,22 @@ import impl from './implementations/simple'
 
 const sugarApi = {
   get(target, prop, reviver) {
-    target.get(prop)
+    return prop === 'get'
+      ? target.get
+      : target.get(prop)
   },
   set(target, prop, value, reviver) {
     value === null
       ? target.delete(prop)
-      : target.set(prop, item)
+      : target.set(prop, value)
+    return true
   },
   deleteProperty(target, prop, reviver) {
     target.delete(prop)
+    return true
   },
   has(target, prop, reviver) {
-    target.has(prop)
+    return target.has(prop)
   },
 }
 
@@ -57,5 +61,5 @@ function proxify(impl, sugarApi) {
   return new Proxy(impl, sugarApi)
 }
 
-const caches = proxify(implWithDefaultAPI, sugarApi)
+const caches = proxify(impl, sugarApi)
 export default caches

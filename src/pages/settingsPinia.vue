@@ -9,10 +9,10 @@ import useGlobalProp from '@/composables/useGlobalProp.js'
 import PiniaStoreToolbar from '@/components/PiniaStoreToolbar.vue'
 
 import { useStoreStats } from '@/stores/stats.js'
-import { useStoreSets } from '@/stores/sets.js'
+import { useStoreSetsCards } from '@/stores/setsCards.js'
 import { useStoreAppConfig } from '@/stores/appConfig.js'
 const stats = useStoreStats()
-const sets = useStoreSets()
+const setsCards = useStoreSetsCards()
 const appConfig = useStoreAppConfig()
 
 const props = defineProps({
@@ -32,7 +32,6 @@ const stores = computed(() => pinia._s)
     <PiniaStoreToolbar class="pinia__toolbar"
       v-for="[storeId] in stores" :key="storeId"
       :storeId="storeId"
-
     />
   </div>
 </template>

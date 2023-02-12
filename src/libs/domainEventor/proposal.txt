@@ -1,0 +1,65 @@
+.// What if I should define model API and that is all what I should do with store?
+.// What if any further lifecycle logic (processes) should be ran inside domain evenets. 
+.// Moreover, there is should be a Responsible Place for it, where you in a declarative way
+.// describe All domain cases during app flow?
+
+.// E.g.
+.//  import { cache } from '@/assets/helpers'
+.//  const cards = useStoreCards
+.//  const revisions = useStoreRevisions
+.//  const stats = useStoreStats
+.// 
+.// 
+.// emmiter('onSetCreated', (setName, setCards) => {
+.//   cards.createSetCards(setName, setCards)
+.//   cache[setCards + setName] = setCards
+.//   
+.//   revisions.createSetRevisionRecords(setName, setCards)
+.//   cache[setRevisions + setName] = setCards
+.//   
+.//   stats.createInitialSetStats(setName, setCards)
+.//   cache[setStats + setName] = stats.sets[setName]
+.//   
+.//   router.push({name: somePage, })
+.// })
+.// 
+.// 1+
+.// This is an entity Responsibility of which is to integrate 
+.// All the technological modules responsible for smth. 
+.// They now may be very stupid and just supply functionality with
+.// according to an API and thats all.
+.// The architectural integration is privided by this entity. 
+.// All entities are devided on 2 groups: suppliers (of functionality)
+.// and integrators (abstract manager, coupling them through public APi,
+.// Providion API, redirectng to children / or own for higher layers)
+.// The absolute advantage is: you decribe domain logic in domain terms
+.// and you see the entire flow (all the data, full order)
+.// 
+.// 2+
+.// You may just read some dock line by line and understand entire AppFlow!
+.// Everything what happens, when and a reaction on it
+.// This approach names "Reactive domain-event-driven programming"
+.// A new person on the project may simply read 200 lines and understand
+.// Everything!
+.// 
+.// 3+
+.// Another advantage of this is that everything is initialized* and 
+.// you are in the macro scope of proggram. you have access to all modules.
+.// You may integrate model, modify its state, provide, its interaction
+.// event model doesn't knows it! (model is still free and isnt' coupled on cache
+.// cahce may doesn't know what and when it save to storage, add provides for whom
+.// (no coupling -> easy testing) pure abstract modular SRP system).
+.// Then navigate with router, Send stats on server
+.// (*) Lazy loading makes it much complicated, as the required module (a.k.a. dependency)
+.// But you may force fetch and load before/during event
+.// Sotimes it makes to use dirty methods to make it work (at least lose lazy effect).
+.// 
+.// 4+
+.// Code written with such an approach is very abstract and almost in term of domain, without
+.// technical implementation (pure domain logic).
+.// 
+.// 5+
+.// Moreover you write JS and may use full power of it: async await Promises, threads for calcs,..
+.// 
+.// 6+
+.// And in the end... You still may use modules direct - without the abstraction

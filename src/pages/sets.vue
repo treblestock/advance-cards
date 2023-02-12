@@ -2,12 +2,11 @@
 import {ref, computed, watch} from 'vue'
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 
 import SetWidget from '@/components/SetWidget.vue'
 
-import { useStoreSets } from '@/stores/sets.js'
+import { useStoreSetsCards } from '@/stores/setsCards.js'
 import { useStoreSetsRevisions } from '@/stores/setsRevisions.js'
 
 const props = defineProps({
@@ -15,11 +14,11 @@ const props = defineProps({
 })
 
 
-const sets = useStoreSets()
+const setsCards = useStoreSetsCards()
 const setsRevisions = useStoreSetsRevisions()
 
 
-const setsNames = computed(() => sets.setsList)
+const setsNames = computed(() => setsCards.setsList)
 
 
 </script>

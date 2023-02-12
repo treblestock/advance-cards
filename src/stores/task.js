@@ -2,15 +2,13 @@ import { defineStore } from "pinia"
 import { computed, watch } from "vue"
 
 
-import { useStoreSets } from '@/stores/sets.js'
+import { useStoreSetsCards } from '@/stores/setsCards.js'
 import { useStoreSetsRevisions } from '@/stores/setsRevisions.js'
 import { useStoreStats } from '@/stores/stats.js'
 
 // helpers
 import { shuffledSet, isShouldRevisedQuestion } from '@/assets/helpers'
 
-
-import useGlobalProp from '@/composables/useGlobalProp.js'
 
 function* _createTaskIterator(toRevise) {
   while(toRevise.size) {
@@ -71,15 +69,15 @@ export const useStoreTask = defineStore('task', {
     },
     // initialization
     createTask() {
-      const setData = computed(() => useStoreSets().sets[this.setName])
+      const setCards = computed(() => useStoreSetsCards().sets[this.setName])
       const setRevisionStats = computed(() => useStoreSetsRevisions().sets[this.setName])
       watch(
-        [setData, setRevisionStats],
+        [setCards, setRevisionStats],
         () => {
-          if (!setData.value || !setRevisionStats.value) return // make logic, when loaded data 
+          if (!setCards.value || !setRevisionStats.value) return // make logic, when loaded data 
 
-          for (const question in setData.value) {
-            const answer = setData.value[question]
+          for (const question in setCards.value) {
+            const answer = setCards.value[question]
             if (isShouldRevisedQuestion(setRevisionStats.value[question])) {
               this.toRevise.add({
                 question,

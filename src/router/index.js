@@ -59,6 +59,10 @@ const routes = [
         name: 'set',
         props: propsParser,
         component: () => import('@/pages/set.vue'),
+        redirect: to => ({
+            name: 'taskViewSingleCard',
+            params: { setName: to.params.setName },
+        }),
         children: [
           
         ],

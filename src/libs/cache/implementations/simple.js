@@ -1,15 +1,17 @@
 const impl = {
   set(itemName, itemValue) {
-    return localStorage.setItem(itemName, JSON.stringify(itemValue))
+    localStorage.setItem(itemName, JSON.stringify(itemValue))
+    return true
   },
-  get(itemName) {
-    return JSON.parse(localStorage.getItem(itemName) )
+  get(itemName, reviver) {
+    return JSON.parse(localStorage.getItem(itemName), reviver )
   },
   has(itemName) {
     return !!localStorage.getItem(itemName)
   },
   delete(itemName) {
     localStorage.removeItem(itemName)
+    return true
   },
 }
 export default impl

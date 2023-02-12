@@ -1,18 +1,16 @@
 <script setup>
 import {ref, computed, watch} from 'vue'
-import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 import useDownload from '@/composables/useDownload.js'
 import useUpload from '@/composables/useUpload.js'
 import useGetCountToReviseToday from '@/composables/useGetCountToReviseToday.js'
 import SetToolbar from '@/components/SetToolbar.vue'
 
-import { useStoreSets } from '@/stores/sets.js'
+import { useStoreSetsCards } from '@/stores/setsCards.js'
 import { useStoreSetsRevisions } from '@/stores/setsRevisions.js'
 
-const sets = useStoreSets()
+const setsCards = useStoreSetsCards()
 const setsRevisions = useStoreSetsRevisions()
 
 const props = defineProps({
@@ -22,9 +20,9 @@ const props = defineProps({
   },
 })
 
-// const countToReviseToday = computed(() => 
-//   useGetCountToReviseToday(sets.sets[props.setName], setsRevisions.sets[props.setName])
-// )
+const countToReviseToday = computed(() => 
+  useGetCountToReviseToday(setsCards.sets[props.setName], setsRevisions.sets[props.setName])
+)
 
 
 const isOpenedToolbar = ref(false)
@@ -39,7 +37,7 @@ const isOpenedToolbar = ref(false)
           {{ setName }}
         </div>
         <div class="set-info__cards">
-          <!-- to revise today: {{ countToReviseToday }} -->
+          to revise today: {{ countToReviseToday }}
         </div>
       </div>
 
@@ -54,10 +52,10 @@ const isOpenedToolbar = ref(false)
       <Transition name="slide-down">
         <SetToolbar class="set-widget__toolbar set-toolbar"
           v-show="isOpenedToolbar"
-          @download="() => useDownload(setName, sets.exportSet(setName))"
-          @update="() => useUpload({onload: (file) => sets.importSet(setName, file.data)} )"
+          @download="() => useDownload(setName, setsCards.exportSet(setName))"
+          @update="() => useUpload({onload: (file) => setsCards.importSet(setName, file.data)} )"
           @edit="() => $navigate({name: 'newSetManualForm', params: {setName} })"
-          @delete="() => sets.deleteSet(setName)"
+          @delete="() => setsCards.deleteSet(setName)"
         ></SetToolbar>
       </Transition>
     </div>

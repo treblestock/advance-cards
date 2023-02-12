@@ -1,9 +1,4 @@
 <script setup>
-import {ref, computed, watch} from 'vue'
-import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
-
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-
 import IconEdit from '@/components/icons/Edit.vue'
 import IconDelete from '@/components/icons/Delete.vue'
 import IconUpload from '@/components/icons/Upload.vue'

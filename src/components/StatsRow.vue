@@ -4,7 +4,7 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
-import { toHumanCase } from '@/assets/helpers/str'
+import { toHumanCase } from '@/assets/helpers'
 
 const props = defineProps({
   statName: {
