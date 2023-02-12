@@ -4,7 +4,7 @@ import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, o
 
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
-import MyIcon from '@/assets/img/icons/_crud/download.svg'
+import MyIcon from '@/assets/img/icons/crud/download.svg'
 
 const props = defineProps({
   
