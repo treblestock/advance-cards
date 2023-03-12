@@ -1,27 +1,34 @@
 export default function ({onload, onerror}) {
   const input = document.createElement('input')
   input.type = 'file'
+  input.multiple = true
   input.style.display = 'none'
 
 
   function onchange(event) {
     const input = event.target
-    const file = input.files[0]
-    const fileName = file.name
+    const files = Array.from(input.files)
 
-    const reader = new FileReader()
-    reader.readAsText(file)
-    reader.onload = () => {
-      const data = reader.result
-      onload({
-        name: fileName,
-        data,
-      })
-      document.body.removeChild(input)
+    function handleFile(file) {
+
     }
-    reader.onerror = () => {
-      return reader.error
-    }
+
+    Promise.all(
+      files.map(file => new Promise(resolve => {
+        const fileName = file.name
+  
+        const reader = new FileReader()
+        reader.readAsText(file)
+        reader.onload = () => {
+          const data = reader.result
+          onload(fileName, data)
+          resolve()
+        }
+        reader.onerror = () => {
+          return reader.error
+        }
+      }))
+    ).finally(res => document.body.removeChild(input))
   }
 
   input.addEventListener('change', onchange)

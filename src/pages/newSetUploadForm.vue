@@ -22,7 +22,7 @@ const props = defineProps({
 <template>
   <div class="new-set-upload-form">
     <NewSetUploadForm 
-      @create="(setName) => useUpload({onload: (file) => setsCards.importSet(setName, file.data)} )"
+      @create="() => useUpload({onload: (filename, filedata) => setsCards.importSet(filename.split('.')[0], filedata)} )"
     ></NewSetUploadForm>
   </div>
 </template>

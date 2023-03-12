@@ -15,12 +15,15 @@ const emit = defineEmits([
 const newSetName = ref('')
 
 function onClick() {
-  if (!newSetName.value) {
-    alert('write a set name')
-    return
-  }
-  emit('create', newSetName.value)
-  newSetName.value = ''
+  emit('create')
+
+
+  // if (!newSetName.value) {
+  //   alert('write a set name')
+  //   return
+  // }
+  // emit('create', newSetName.value)
+  // newSetName.value = ''
 }
 // function onUpload(event) {
 //   if (!newSetName) alert('write a set name')
@@ -31,9 +34,9 @@ function onClick() {
 
 <template>
   <div class="set-toolbar">
-    <input class="set-toolbar__store-name"
+    <!-- <input class="set-toolbar__store-name"
       v-model="newSetName"
-    >
+    > -->
     <div class="set-toolbar__btns">
       <Btn class="set-toolbar__updalod set-toolbar__btn"
         @click="onClick"
