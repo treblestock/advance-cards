@@ -1,8 +1,5 @@
 <script setup>
 import {ref, computed, watch} from 'vue'
-import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
-
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 
 const props = defineProps({

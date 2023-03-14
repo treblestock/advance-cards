@@ -52,17 +52,29 @@ export const useStoreSetsRevisions = defineStore('setsRevisions', () => {
 
   // update stats
   function createInitialStats(setName, setCards) {
-    function _createInitialStats(setCards) {
-      const stats = {}
-      for (const question in setCards) {
-        if (!setCards.hasOwnProperty(question) ) continue
-        stats[question] = {...INITIAL_ANSWER_STATS}
-      }
-      return stats
-    }
     const initialRevisions = _createInitialStats(setCards)
     sets.value[setName] = initialRevisions
     saveSetRevisionsCache(setName, initialRevisions)
+  }
+  function _createInitialStats(setCards) {
+    return Array.isArray(setCards) 
+      ? _createInitialStatsFromChain(setCards) 
+      : _createInitialStatsFromPairs(setCards) 
+  }
+  function _createInitialStatsFromPairs(setCards) {
+    const stats = {}
+    for (const question in setCards) {
+      if (!setCards.hasOwnProperty(question) ) continue
+      stats[question] = {...INITIAL_ANSWER_STATS}
+    }
+    return stats
+  }
+  function _createInitialStatsFromChain(setCards) {
+    const stats = {}
+    for (const question of setCards) {
+      stats[question] = {...INITIAL_ANSWER_STATS}
+    }
+    return stats
   }
   function updateRevisions(setName, setCards) {
     // creation
@@ -78,7 +90,7 @@ export const useStoreSetsRevisions = defineStore('setsRevisions', () => {
     sets.value[setName] = updatedRevisions
     cache['setRevisions' + setName] = updatedRevisions
   }
-  function updateRevisionCardData ({setName, question, isCorrect}) {
+  function updateRevisionCardData ({setName, card: {question}, isCorrect}) {
     if (!isCorrect) return
     const revisionCardData = sets.value[setName][question]
     if (!revisionCardData) {

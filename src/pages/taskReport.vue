@@ -34,6 +34,8 @@ const taskStats = computed(() => {
   }
 })
 
+onBeforeUnmount(() => task.reset() )
+
 
 
 </script>

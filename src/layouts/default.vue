@@ -43,6 +43,7 @@ const PAGES_NAMES = ['sets', 'stats', 'settings']
   &__main {
     flex: 1 1 auto;
     padding: 0.5rem;
+    padding-bottom: 6rem;
   }
   &__footer {
     position: fixed;

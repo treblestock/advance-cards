@@ -30,36 +30,44 @@ const isOpenedToolbar = ref(false)
 </script>
 
 <template>
-  <div class="set-widget">
-    <div class="set-widget__row">
-      <div class="set-widget__info set-info">
-        <div class="set-info__name">
-          {{ setName }}
+  <AppLink 
+    :to="{
+      name: 'set',
+      params: {
+        setName,
+      },
+    }">
+    <div class="set-widget">
+      <div class="set-widget__row">
+        <div class="set-widget__info set-info">
+          <div class="set-info__name">
+            {{ setName }}
+          </div>
+          <div class="set-info__cards">
+            to revise today: {{ countToReviseToday }}
+          </div>
         </div>
-        <div class="set-info__cards">
-          to revise today: {{ countToReviseToday }}
-        </div>
-      </div>
 
-      <Btn class="set-toolbar-toggler set-info__toolbar-toggler"
-        :class="{_active: isOpenedToolbar}"
-        @click.prevent="() => isOpenedToolbar = !isOpenedToolbar"
-      ></Btn>
+        <Btn class="set-toolbar-toggler set-info__toolbar-toggler"
+          :class="{_active: isOpenedToolbar}"
+          @click.prevent="() => isOpenedToolbar = !isOpenedToolbar"
+        ></Btn>
+      </div>
+      <div class="set-widget__row"
+        @click.prevent=""
+      >
+        <Transition name="slide-down">
+          <SetToolbar class="set-widget__toolbar set-toolbar"
+            v-show="isOpenedToolbar"
+            @download="() => useDownload(setName, setsCards.exportSet(setName))"
+            @update="() => useUpload({onload: (file) => setsCards.importSet(setName, file.data)} )"
+            @edit="() => $navigate({name: 'newSetManualForm', params: {setName} })"
+            @delete="() => setsCards.deleteSet(setName)"
+          ></SetToolbar>
+        </Transition>
+      </div>
     </div>
-    <div class="set-widget__row"
-      @click.prevent=""
-    >
-      <Transition name="slide-down">
-        <SetToolbar class="set-widget__toolbar set-toolbar"
-          v-show="isOpenedToolbar"
-          @download="() => useDownload(setName, setsCards.exportSet(setName))"
-          @update="() => useUpload({onload: (file) => setsCards.importSet(setName, file.data)} )"
-          @edit="() => $navigate({name: 'newSetManualForm', params: {setName} })"
-          @delete="() => setsCards.deleteSet(setName)"
-        ></SetToolbar>
-      </Transition>
-    </div>
-  </div>
+  </AppLink>
 </template>
 
 <style lang="pcss" scoped>

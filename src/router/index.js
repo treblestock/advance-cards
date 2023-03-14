@@ -60,7 +60,7 @@ const routes = [
         props: propsParser,
         component: () => import('@/pages/set.vue'),
         redirect: to => ({
-            name: 'taskViewSingleCard',
+            name: 'taskViewCardsList',
             params: { setName: to.params.setName },
         }),
         children: [
@@ -72,6 +72,15 @@ const routes = [
         name: 'taskViewSingleCard',
         props: propsParser,
         component: () => import('@/pages/taskViewSingleCard.vue'),
+        children: [
+          
+        ],
+      },
+      {
+        path: 'task-view-cards-list/:setName',
+        name: 'taskViewCardsList',
+        props: propsParser,
+        component: () => import('@/pages/taskViewCardsList.vue'),
         children: [
           
         ],

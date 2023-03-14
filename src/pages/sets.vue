@@ -19,23 +19,37 @@ const setsRevisions = useStoreSetsRevisions()
 
 
 const setsNames = computed(() => setsCards.setsList)
-
+// const setsNamesForVirtualScroll = computed(() => 
+//   setsNames.value.map(setName => ({setName}) )
+// )
+// const updateKey = ref(0)
+// onBeforeUpdate(() => {
+//   console.log('updated...')
+//   updateKey.value++
+// })
 
 </script>
 
 <template>
   <div class="sets-page">
     <div class="sets-page__sets-list">
-      <AppLink 
-        v-for="setName in setsNames"
-        :to="{
-          name: 'set',
-          params: {
-            setName,
-          },
-        }">
-        <SetWidget :setName="setName"></SetWidget>
-      </AppLink>
+      <SetWidget
+        v-for="setName in setsNames" :key="setName" 
+        :setName="setName"
+      ></SetWidget>
+      <!-- <VirtualScroll class="sets-page__sets-scroll"
+        :itemsProps="setsNamesForVirtualScroll" 
+        :component="SetWidget"
+        :poolCount="12"
+        :key="updateKey"
+      >
+      </VirtualScroll> -->
+        <!-- <template #default="{slotProps: {setName}, setSlotRef}" >
+          <SetWidget 
+            :ref="(el) => setSlotRef(el)"
+            :setName="setName" 
+          ></SetWidget>
+        </template> -->
     </div>
     <div class="sets-page__new-set">
       <RouterView></RouterView>
@@ -50,6 +64,10 @@ const setsNames = computed(() => setsCards.setsList)
 
   &__sets-list {
     margin-bottom: 1rem;
+  }
+  &__sets-scroll {
+    max-height: 60vh;
+    width: 100%;
   }
 
   &__new-set {

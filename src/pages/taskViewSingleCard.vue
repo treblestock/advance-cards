@@ -2,8 +2,6 @@
 import {ref, computed, watch} from 'vue'
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-
 import TaskViewSingleCardQuestion from '@/components/TaskViewSingleCardQuestion.vue'
 
 import { useStoreTask } from '@/stores/task.js'
@@ -37,7 +35,7 @@ function createRevisionAnswer(event) {
     isCorrect,
     time: Date.now(),
     setName: task.setName,
-    question: currentCard.value.question,
+    card: currentCard.value,
   }
 }
 function onClick(event) {
@@ -55,7 +53,6 @@ var sendAnswer = (revisionAnswer) => {
 
 <template>
   <div class="task"
-
     @pointerup="onClick"
   >
     <TaskViewSingleCardQuestion
